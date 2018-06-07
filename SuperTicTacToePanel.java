@@ -23,6 +23,7 @@ public class SuperTicTacToePanel extends JPanel {
 	private JLabel oWon;
 	private JButton quitButton;
 	private JButton undoButton;
+	private JButton resetButton;
 
 	private SuperTicTacToeGame game;
 
@@ -89,11 +90,13 @@ public class SuperTicTacToePanel extends JPanel {
 		}
 
 
-		// create Undo and quit buttons.
+		// create Undo, quit, and reset buttons.
 		quitButton = new JButton("Quit");
 		quitButton.addActionListener(listener);
 		undoButton = new JButton("Undo");
 		undoButton.addActionListener(listener);
+		resetButton = new JButton("Reset");
+		resetButton.addActionListener(listener);
 
 		// create the board 
 		center.setLayout(new GridLayout(size,size,3,2));
@@ -114,7 +117,7 @@ public class SuperTicTacToePanel extends JPanel {
 
 		displayBoard();
 
-		bottom.setLayout (new GridLayout(3,2));
+		bottom.setLayout (new GridLayout(4,2,2,2));
 
 		JLabel labxWins = new JLabel ("X Wins: ");
 		JLabel laboWins = new JLabel ("O Wins: ");
@@ -127,6 +130,7 @@ public class SuperTicTacToePanel extends JPanel {
 		bottom.add(oWon);
 		bottom.add(quitButton);
 		bottom.add(undoButton);
+		bottom.add(resetButton);
 
 		// add all to contentPane
 
@@ -197,6 +201,23 @@ public class SuperTicTacToePanel extends JPanel {
 						"\n The game will reset");
 				game.reset();
 				displayBoard();
+			}
+
+			if (resetButton == e.getSource()) {
+		
+				SuperTicTacToe.main(new String[]{});
+				
+//				System.exit(0);
+				
+				//see if it works
+//				game = new SuperTicTacToeGame(6, 4);
+//				displayBoard();
+
+			}
+			if (undoButton == e.getSource()) {
+				
+				
+
 			}
 		}
 	}

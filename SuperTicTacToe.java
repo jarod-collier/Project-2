@@ -1,9 +1,9 @@
 package package1;
 
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+
+import java.awt.event.WindowEvent;
 
 /**********************************************************************
 Creates the GUI for the TicTacToe board
@@ -14,27 +14,30 @@ Creates the GUI for the TicTacToe board
 
 public class SuperTicTacToe {
 	public static void main (String[] args) {
-		JMenuBar menus;
-		JMenu fileMenu;
-		JMenuItem quitItem;
-		JMenuItem gameItem;
+//		JMenuBar menus;
+//		JMenu fileMenu;
+//		JMenuItem quitItem;
+//		JMenuItem gameItem;
 
 		JFrame frame = new JFrame ("Jarod and Ben's Super TicTacToe!");
-		frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		
+		frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 
-		fileMenu = new JMenu("File");
-		quitItem = new JMenuItem("quit");
-		gameItem = new JMenuItem("new game");
+//		fileMenu = new JMenu("File");
+//		quitItem = new JMenuItem("quit");
+//		gameItem = new JMenuItem("new game");
 
-		fileMenu.add(gameItem);
-		fileMenu.add(quitItem);
-		menus = new JMenuBar();
-		frame.setJMenuBar(menus);
-		menus.add(fileMenu);
-
+//		fileMenu.add(gameItem);
+//		fileMenu.add(quitItem);
+//		menus = new JMenuBar();
+//		frame.setJMenuBar(menus);
+//		menus.add(fileMenu);
+		
 		SuperTicTacToePanel panel = new SuperTicTacToePanel();
 		frame.getContentPane().add(panel);
-
+		
 		frame.pack();
 //		frame.setSize(1200, 700);
 		frame.setVisible(true);
