@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * This class handles all of the game logic for Tic Tac Toe
  * 
  * @author Jarod Collier and Ben Burger
- * @version5/31/18
+ * @version 5/31/18
  *********************************************************************/
 
 public class SuperTicTacToeGame {
@@ -158,7 +158,7 @@ public class SuperTicTacToeGame {
 					count++;
 			}
 		}
-		if (count == size * size)
+		if (count == 0)
 			return GameStatus.CATS;
 
 		return GameStatus.IN_PROGRESS;
@@ -172,6 +172,8 @@ public class SuperTicTacToeGame {
 		for (int r = 0; r < size; r++) 
 			for (int c = 0; c < size; c++) 
 				board[r][c] = CellStatus.EMPTY;
+		
+		status = isWinner();
 	}
 
 	/******************************************************************

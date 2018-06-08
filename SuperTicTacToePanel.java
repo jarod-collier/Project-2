@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
  * 
  * @author Jarod Collier and Ben Burger
  * @version 5/31/18
- *
  *********************************************************************/
 public class SuperTicTacToePanel extends JPanel {
 
@@ -169,10 +168,25 @@ public class SuperTicTacToePanel extends JPanel {
 			if (quitButton == e.getSource())
 				System.exit(0);
 
+			if (resetButton == e.getSource()) {
+				JOptionPane.showMessageDialog(null, "The game will reset");
+				game.reset();
+				displayBoard();
+		
+//				SuperTicTacToe.main(new String[]{});
+				
+//				System.exit(0);
+				
+				//see if it works
+//				game = new SuperTicTacToeGame(6, 4);
+//				displayBoard();
+			}
+			
+			
+			
 			for (int row = 0; row < game.getBoard().length; row++)
 				for (int col = 0; col < game.getBoard().length; col++)
-					if (board[row][col] == e.getSource() &&
-					game.isEmpty(row,col))
+					if (board[row][col] == e.getSource() && game.isEmpty(row,col))
 						game.select (row,col);
 
 
@@ -203,17 +217,7 @@ public class SuperTicTacToePanel extends JPanel {
 				displayBoard();
 			}
 
-			if (resetButton == e.getSource()) {
-		
-				SuperTicTacToe.main(new String[]{});
-				
-//				System.exit(0);
-				
-				//see if it works
-//				game = new SuperTicTacToeGame(6, 4);
-//				displayBoard();
-
-			}
+			
 			if (undoButton == e.getSource()) {
 				
 				
