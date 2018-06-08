@@ -2,9 +2,6 @@ package package1;
 
 import javax.swing.JFrame;
 
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-
 import java.awt.event.WindowEvent;
 
 /**********************************************************************
