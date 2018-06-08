@@ -32,6 +32,8 @@ public class SuperTicTacToePanel extends JPanel {
 
 	private int size;
 	private int connectionsToWin;
+	private int turn;
+	private int [][] turnSelection;
 
 	public SuperTicTacToePanel() {
 
@@ -82,6 +84,8 @@ public class SuperTicTacToePanel extends JPanel {
 
 		try {
 			game = new SuperTicTacToeGame(size, connectionsToWin);
+			turn = 0;
+			turnSelection = new int [size*size][2];
 		}
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Enter" +
@@ -184,11 +188,16 @@ public class SuperTicTacToePanel extends JPanel {
 			
 			
 			
-			for (int row = 0; row < game.getBoard().length; row++)
-				for (int col = 0; col < game.getBoard().length; col++)
-					if (board[row][col] == e.getSource() && game.isEmpty(row,col))
+			for (int row = 0; row < game.getBoard().length; row++) {
+				for (int col = 0; col < game.getBoard().length; col++) {
+					if (board[row][col] == e.getSource() && game.isEmpty(row,col)) {
 						game.select (row,col);
-
+						turnSelection [turn][0] = row;
+						turnSelection [turn][1] = col;
+						turn++;
+					}
+				}
+			}
 
 			displayBoard();
 
@@ -219,9 +228,14 @@ public class SuperTicTacToePanel extends JPanel {
 
 			
 			if (undoButton == e.getSource()) {
-				
-				
-
+				if (turn >= 1) {
+					game.undo(turnSelection[turn-1][0],turnSelection[turn-1][1]);
+					turn--;
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Cannot undo");
+				}
+				displayBoard();
 			}
 		}
 	}
