@@ -26,6 +26,7 @@ public class SuperTicTacToe {
 		frame.setLocationRelativeTo(null);
 		
 		frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+		frame.setVisible(false);
 
 		fileMenu = new JMenuItem("File");
 		quitItem = new JMenuItem("quit");

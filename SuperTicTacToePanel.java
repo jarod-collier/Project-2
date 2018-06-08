@@ -169,11 +169,11 @@ public class SuperTicTacToePanel extends JPanel {
 				System.exit(0);
 
 			if (resetButton == e.getSource()) {
-				JOptionPane.showMessageDialog(null, "The game will reset");
-				game.reset();
-				displayBoard();
+//				JOptionPane.showMessageDialog(null, "The game will reset");
+//				game.reset();
+//				displayBoard();
 		
-//				SuperTicTacToe.main(new String[]{});
+				SuperTicTacToe.main(new String[]{});
 				
 //				System.exit(0);
 				
