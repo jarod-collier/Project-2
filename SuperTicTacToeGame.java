@@ -207,5 +207,9 @@ public class SuperTicTacToeGame {
 	
 	public void undo (int row, int col) {
 		board[row][col] = CellStatus.EMPTY;
+		if (turn == CellStatus.O)
+			turn = CellStatus.X;
+		else
+			turn = CellStatus.O;
 	}
 }
