@@ -204,4 +204,8 @@ public class SuperTicTacToeGame {
 	public boolean isEmpty(int row, int col) {
 		return board[row][col] == CellStatus.EMPTY;
 	}
+	
+	public void undo (int row, int col) {
+		board[row][col] = CellStatus.EMPTY;
+	}
 }
