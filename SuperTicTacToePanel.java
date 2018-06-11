@@ -20,6 +20,8 @@ public class SuperTicTacToePanel extends JPanel {
 	private CellStatus iCell;
 	private JLabel xWon;
 	private JLabel oWon;
+	private JLabel labxWins;
+	private JLabel laboWins;
 	private JButton quitButton;
 	private JButton undoButton;
 	private JButton resetButton;
@@ -34,11 +36,19 @@ public class SuperTicTacToePanel extends JPanel {
 	private int connectionsToWin;
 	private int turn;
 	private int [][] turnSelection;
+	
+	JPanel bottom;
+	JPanel center;
+	ButtonListener listener;
+	
+	
 
 	public SuperTicTacToePanel() {
 
-		JPanel bottom = new JPanel();
-		JPanel center = new JPanel();
+//		setLayout(new BorderLayout());
+		
+		bottom = new JPanel();
+//		center = new JPanel();
 
 		//Sets images for the icons
 		emptyIcon = new ImageIcon("blank.png");
@@ -46,9 +56,74 @@ public class SuperTicTacToePanel extends JPanel {
 		oIcon = new ImageIcon("o.png");
 
 		// create game, listeners
-		ButtonListener listener = new ButtonListener();
+		listener = new ButtonListener();
+
+		// create Undo, quit, and reset buttons.
+		quitButton = new JButton("Quit");
+		quitButton.addActionListener(listener);
+		undoButton = new JButton("Undo");
+		undoButton.addActionListener(listener);
+		resetButton = new JButton("Reset");
+		resetButton.addActionListener(listener);
+
+		createBoard();
+
+		displayBoard();
+
+		bottom.setLayout (new GridLayout(4,2,2,2));
+
+		labxWins = new JLabel ("X Wins: ");
+		laboWins = new JLabel ("O Wins: ");
+		xWon = new JLabel ("0");
+		oWon = new JLabel ("0");
+
+		bottom.add(labxWins);
+		bottom.add(xWon);
+		bottom.add(laboWins);
+		bottom.add(oWon);
+		bottom.add(quitButton);
+		bottom.add(undoButton);
+		bottom.add(resetButton);
+
+		// add all to contentPane
+
+		//		add (new JLabel("!!!!!!  Super TicTacToe  !!!!"), 
+		//				BorderLayout.NORTH);
+		add (bottom, BorderLayout.SOUTH);
+		add (center, BorderLayout.CENTER);
+//		add (center);
+//		add (bottom);
+		
+
+	}
+	/******************************************************************
+	 * Displays the TicTacToe board by setting the image in each cell.
+	 *****************************************************************/
+	private void displayBoard() {
+
+		for (int row = 0; row < game.getBoard().length; row++)
+			for (int col = 0; col < game.getBoard().length; col++) {
+
+				board[row][col].setIcon(emptyIcon);
+				iCell = game.getCell(row, col);
+
+				if (iCell == CellStatus.O)
+					board[row][col].setIcon(oIcon);
+
+				else if (iCell == CellStatus.X)
+					board[row][col].setIcon(xIcon);
+
+				else if (iCell == CellStatus.EMPTY)
+					board[row][col].setIcon(emptyIcon);
+			}
+
+	}
 
 
+	public void createBoard () {
+		
+	
+		
 		// Asks user for the desired board size
 		boolean goodNum = false;
 
@@ -92,18 +167,9 @@ public class SuperTicTacToePanel extends JPanel {
 					" valid parameters.");
 		}
 
-
-		// create Undo, quit, and reset buttons.
-		quitButton = new JButton("Quit");
-		quitButton.addActionListener(listener);
-		undoButton = new JButton("Undo");
-		undoButton.addActionListener(listener);
-		resetButton = new JButton("Reset");
-		resetButton.addActionListener(listener);
-
-		// create the board 
+		
+		center = new JPanel();
 		center.setLayout(new GridLayout(size,size,3,2));
-		Dimension temp = new Dimension(60,60);
 		board = new JButton[size][size];
 
 		for (int row = 0; row < game.getBoard().length; row++)
@@ -117,54 +183,8 @@ public class SuperTicTacToePanel extends JPanel {
 				board[row][col].addActionListener(listener);
 				center.add(board[row][col]);
 			}
-
-		displayBoard();
-
-		bottom.setLayout (new GridLayout(4,2,2,2));
-
-		JLabel labxWins = new JLabel ("X Wins: ");
-		JLabel laboWins = new JLabel ("O Wins: ");
-		xWon = new JLabel ("0");
-		oWon = new JLabel ("0");
-
-		bottom.add(labxWins);
-		bottom.add(xWon);
-		bottom.add(laboWins);
-		bottom.add(oWon);
-		bottom.add(quitButton);
-		bottom.add(undoButton);
-		bottom.add(resetButton);
-
-		// add all to contentPane
-
-		//		add (new JLabel("!!!!!!  Super TicTacToe  !!!!"), 
-		//				BorderLayout.NORTH);
-		add (center, BorderLayout.CENTER);
-		add (bottom, BorderLayout.SOUTH);
-
 	}
-	/******************************************************************
-	 * Displays the TicTacToe board by setting the image in each cell.
-	 *****************************************************************/
-	private void displayBoard() {
 
-		for (int row = 0; row < game.getBoard().length; row++)
-			for (int col = 0; col < game.getBoard().length; col++) {
-
-				board[row][col].setIcon(emptyIcon);
-				iCell = game.getCell(row, col);
-
-				if (iCell == CellStatus.O)
-					board[row][col].setIcon(oIcon);
-
-				else if (iCell == CellStatus.X)
-					board[row][col].setIcon(xIcon);
-
-				else if (iCell == CellStatus.EMPTY)
-					board[row][col].setIcon(emptyIcon);
-			}
-
-	}
 
 	private class ButtonListener implements ActionListener {
 
@@ -173,6 +193,7 @@ public class SuperTicTacToePanel extends JPanel {
 				System.exit(0);
 
 			if (resetButton == e.getSource()) {
+<<<<<<< HEAD
 //				JOptionPane.showMessageDialog(null, "The game will reset");
 //				game.reset();
 //				displayBoard();
@@ -184,10 +205,20 @@ public class SuperTicTacToePanel extends JPanel {
 				//see if it works
 //				game = new SuperTicTacToeGame(6, 4);
 //				displayBoard();
+=======
+				JOptionPane.showMessageDialog(null, "The game will reset");
+				game.reset();
+				remove(center);
+				createBoard();
+				add (center, BorderLayout.CENTER);
+				displayBoard();
+				revalidate();
+				repaint();
+>>>>>>> cfb61316a614e918518cd47523e36fd7dd893ef6
 			}
-			
-			
-			
+
+
+
 			for (int row = 0; row < game.getBoard().length; row++) {
 				for (int col = 0; col < game.getBoard().length; col++) {
 					if (board[row][col] == e.getSource() && game.isEmpty(row,col)) {
@@ -226,7 +257,7 @@ public class SuperTicTacToePanel extends JPanel {
 				displayBoard();
 			}
 
-			
+
 			if (undoButton == e.getSource()) {
 				if (turn >= 1) {
 					game.undo(turnSelection[turn-1][0],turnSelection[turn-1][1]);
