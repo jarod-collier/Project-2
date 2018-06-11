@@ -45,10 +45,9 @@ public class SuperTicTacToePanel extends JPanel {
 
 	public SuperTicTacToePanel() {
 
-//		setLayout(new BorderLayout());
 		
 		bottom = new JPanel();
-//		center = new JPanel();
+
 
 		//Sets images for the icons
 		emptyIcon = new ImageIcon("blank.png");
@@ -70,8 +69,8 @@ public class SuperTicTacToePanel extends JPanel {
 
 		displayBoard();
 
-		bottom.setLayout (new GridLayout(4,2,2,2));
-
+		bottom.setLayout (new GridLayout(4,2,0,0));
+		
 		labxWins = new JLabel ("X Wins: ");
 		laboWins = new JLabel ("O Wins: ");
 		xWon = new JLabel ("0");
@@ -85,14 +84,9 @@ public class SuperTicTacToePanel extends JPanel {
 		bottom.add(undoButton);
 		bottom.add(resetButton);
 
-		// add all to contentPane
-
-		//		add (new JLabel("!!!!!!  Super TicTacToe  !!!!"), 
-		//				BorderLayout.NORTH);
-		add (bottom, BorderLayout.SOUTH);
-		add (center, BorderLayout.CENTER);
-//		add (center);
-//		add (bottom);
+		add (bottom);
+		add (center);
+		
 		
 
 	}
@@ -197,7 +191,7 @@ public class SuperTicTacToePanel extends JPanel {
 				game.reset();
 				remove(center);
 				createBoard();
-				add (center, BorderLayout.CENTER);
+				add (center);
 				displayBoard();
 				revalidate();
 				repaint();
