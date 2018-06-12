@@ -1,7 +1,6 @@
 package package1;
 
-import java.awt.*;
-import java.util.ArrayList;
+import java.util.Random;
 
 /**********************************************************************
  * This class handles all of the game logic for Tic Tac Toe
@@ -18,7 +17,7 @@ public class SuperTicTacToeGame {
 	/** Tells the status of the game */
 	private GameStatus status;
 
-	/** Creates an int called size for the board */
+	/** Creates an integer called size for the board */
 	private int size;
 
 	/** Used for the cells specific turn on the board */
@@ -34,19 +33,19 @@ public class SuperTicTacToeGame {
 		if (size <= 2)
 			throw new IllegalArgumentException("Must " +
 					"have board size greater than 2");
-		
+
 		if (size >= 10)
 			throw new IllegalArgumentException("Must " +
 					"have board size smaller than 10");
-		
+
 		if (connections <= 2)
 			throw new IllegalArgumentException("Must " +
 					"have connections greater than 2");
-		
+
 		if (connections > size)
 			throw new IllegalArgumentException("Connections " +
 					"can not be greater than board size");
-		
+
 		status = GameStatus.IN_PROGRESS;
 
 		this.connections = connections;
@@ -79,12 +78,15 @@ public class SuperTicTacToeGame {
 		if (board[row][col] != CellStatus.EMPTY)
 			return;
 
+		status = isWinner();
+
 		board[row][col] = turn;
 
 		if (turn == CellStatus.O)
 			turn = CellStatus.X;
 		else
 			turn = CellStatus.O;
+
 		status = isWinner();
 	}
 
@@ -154,11 +156,11 @@ public class SuperTicTacToeGame {
 		int count = 0;
 		for (int row = 0; row < size; row++) {
 			for (int col = 0; col < size; col++) {
-				if (board[row][col] == CellStatus.EMPTY)
+				if (board[row][col] != CellStatus.EMPTY)
 					count++;
 			}
 		}
-		if (count == 0)
+		if (count == size * size)
 			return GameStatus.CATS;
 
 		return GameStatus.IN_PROGRESS;
@@ -172,7 +174,9 @@ public class SuperTicTacToeGame {
 		for (int r = 0; r < size; r++) 
 			for (int c = 0; c < size; c++) 
 				board[r][c] = CellStatus.EMPTY;
-		
+
+		turn = CellStatus.X;
+
 		status = isWinner();
 	}
 
@@ -204,7 +208,7 @@ public class SuperTicTacToeGame {
 	public boolean isEmpty(int row, int col) {
 		return board[row][col] == CellStatus.EMPTY;
 	}
-	
+
 	public void undo (int row, int col) {
 		board[row][col] = CellStatus.EMPTY;
 		if (turn == CellStatus.O)
@@ -212,4 +216,281 @@ public class SuperTicTacToeGame {
 		else
 			turn = CellStatus.O;
 	}
+
+	public void startMoveAI() {
+		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
+			Random r = new Random();
+
+			//Selects place to initially go
+			int count = 0;
+			for (int row = 0; row < size; row++) {
+				for (int col = 0; col < size; col++) {
+					if (board[row][col] != CellStatus.O) {
+						count++;
+					}
+				}
+			}
+			if (count == size * size) 
+				select((r.nextInt(size)), (r.nextInt(size)));
+
+			count = 0;
+		}
+	}
+
+	public void tryToWinAI() {
+
+		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
+
+			//Checks if O about to win horizontally
+			for (int row = 0; row < size; row++) {
+				for (int col = 0; col < size; col++) {
+
+					int numToWin = 0;
+
+					for (int oHor = 0; oHor < connections - 1; oHor++){
+						if (board[row][(col + oHor) % size] == 
+								CellStatus.O) 
+							numToWin++;
+					}
+
+					if ((numToWin == connections - 1) && 
+							status == GameStatus.IN_PROGRESS) {
+
+						//Looks at the space to the right
+						if (board[row][(col + connections - 1) % size] 
+								== CellStatus.EMPTY) {
+							select(row, 
+									(col + connections - 1) % size);
+						}
+
+						//Looks at the space to the left
+						else if (board[row][(col + size - 1) % size] 
+								== CellStatus.EMPTY) {
+							select(row, (col + size - 1) % size);
+						}
+					}
+				}
+			}
+
+
+			//Checks if O about to win vertically
+			for (int col = 0; col < size; col++) {
+				for (int row = 0; row < size; row++) {
+
+					int connectToWin = 0;
+
+					for (int oVert = 0; oVert < connections; oVert++){
+						if (board[(row + oVert) % size][col] == 
+								CellStatus.O)
+							connectToWin++;
+					}
+
+					if ((connectToWin == connections - 1) &&
+							status == GameStatus.IN_PROGRESS) {
+
+						//Looks at the space above
+						if (board [(row + size % size)][col] 
+								== CellStatus.EMPTY ) {
+							select((row + size % size), col);
+						}
+						//Looks at the space below
+						else if (board[(row + connections - 1) % size]
+								[col] == CellStatus.EMPTY)  {
+							select((row + connections - 1) % size,
+									col);
+						}
+
+
+
+					}
+				}
+			}
+		}
+
+	}
+
+	public void blockUserAI() {
+		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
+
+			//Checks if X about to win horizontally
+			for (int row = 0; row < size; row++) {
+				for (int col = 0; col < size; col++) {
+
+					int numToWin = 0;
+
+					for (int xHor = 0; xHor < connections - 1; xHor++){
+						if (board[row][(col + xHor) % size] == 
+								CellStatus.X)
+							numToWin++;
+					}
+
+					if ((numToWin == connections - 1) && 
+							status == GameStatus.IN_PROGRESS) {
+
+						//Looks at the space to the right
+						if (board[row][(col + connections - 1) % size] 
+								== CellStatus.EMPTY) {
+							select(row, 
+									(col + connections - 1) % size);
+						}
+
+						//Looks at the space to the left
+						else if (board[row][(col + size - 1) % size] 
+								== CellStatus.EMPTY) {
+							select(row, (col + size - 1) % size);
+						}
+					}
+				}
+			}
+
+
+			//Checks if X about to win vertically
+			for (int col = 0; col < size; col++) {
+				for (int row = 0; row < size; row++) {
+
+					int connectToWin = 0;
+
+					for (int xVert = 0; xVert < connections; xVert++){
+						if (board[(row + xVert) % size][col] == 
+								CellStatus.X)
+							connectToWin++;
+					}
+
+					if ((connectToWin == connections - 1) &&
+							status == GameStatus.IN_PROGRESS) {
+
+						//Looks at the space above
+						if (board [(row + size % size)][col] 
+								== CellStatus.EMPTY ) {
+							select((row + size % size), col);
+							return;
+						}
+						//Looks at the space below
+						else if (board[(row + connections - 1) % size]
+								[col] == CellStatus.EMPTY)  {
+							select((row + connections - 1) % size, 
+									col);
+							return;
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	public void tacticsAI() {
+		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
+
+			//Tactically moves up or down
+			for (int col = 0; col < size; col++) {
+				for (int row = 0; row < size; row++) {
+
+					if (board[row][col] == CellStatus.O) {
+						int attemptToWin = 0;
+						System.out.println("Vertical - row: " + row +
+								" \n col: " + col);
+
+						//Attempts to move down
+						for (int con = 1; con < connections;
+								con++) {
+							if (getCell((row + con) % size, col)
+									== CellStatus.EMPTY) 
+								attemptToWin++;							
+						}
+						if (attemptToWin == connections - 1 &&
+								getCell((row + 1) % size, col)
+								== CellStatus.EMPTY ) {
+							System.out.println("going down");
+							select((row + 1) % size, col);
+							attemptToWin = 0;
+							return;
+						}
+						else
+							attemptToWin = 0;
+
+						//Attempts to move up
+						for (int con = 1; con < connections; con++) {
+							if (getCell((row + size - con - 1) % size,
+									col) == CellStatus.EMPTY) 
+								attemptToWin++;							
+						}
+						if (attemptToWin == connections - 1 &&
+								getCell((row + size - 1) % size, col)
+							== CellStatus.EMPTY) {
+							System.out.println("going up");
+							select((row + size - 1) % size, col);
+							attemptToWin = 0;
+							return;
+						}
+						else
+							attemptToWin = 0;
+					}
+				}
+			}
+
+			//Tactically moves left or right
+			for (int row = 0; row < size; row++) {
+				for (int col = 0; col < size; col++) {
+
+					if (board[row][col] == CellStatus.O) {
+						int attemptToWin = 0;
+						System.out.println("Horizontal - row: " + row
+								+ " \n col: " + col);
+
+						//Attempts to move left
+						for (int con = 1; con < connections; con++) {
+							if (getCell(row, (col + size - con) % size)
+									== CellStatus.EMPTY) 
+								attemptToWin++;							
+						}
+						if (attemptToWin == connections - 1 &&
+								getCell(row, (col + size - 1) % size) 
+								== CellStatus.EMPTY) {
+							System.out.println("going left");
+							select(row, (col + size - 1) % size);
+							attemptToWin = 0;
+							return;
+						}
+						else
+							attemptToWin = 0;
+
+						//Attempts to move right
+						for (int con = 1; con < connections; con++) {
+							if (getCell(row, (col + size + con) % size)
+									== CellStatus.EMPTY) 
+								attemptToWin++;							
+						}
+						if (attemptToWin == connections - 1 &&
+								getCell(row, (col + size + 1) % size) 
+								== CellStatus.EMPTY) {
+							System.out.println("going right");
+							select(row, (col + size + 1) % size);
+							attemptToWin = 0;
+							return;
+						}
+						else
+							attemptToWin = 0;
+					}
+
+				}
+			}
+			
+			//If no tactical move exits, randomly move
+			Random rand = new Random();
+			
+			int r = (rand.nextInt(size));
+			int c = (rand.nextInt(size));
+			
+			while( getCell(r, c) != CellStatus.EMPTY) {
+				r = (rand.nextInt(size));
+				c = (rand.nextInt(size));
+			}
+			System.out.println("Randomly moving");
+			select(r,c);
+			return;
+			
+		}
+	}
+
 }

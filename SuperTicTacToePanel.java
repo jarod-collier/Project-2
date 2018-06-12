@@ -111,7 +111,7 @@ public class SuperTicTacToePanel extends JPanel {
 
 				else if (iCell == CellStatus.EMPTY)
 					board[row][col].setIcon(emptyIcon);
-			}
+			}		
 
 	}
 
@@ -212,13 +212,16 @@ public class SuperTicTacToePanel extends JPanel {
 				remove(center);
 				createBoard();
 				add (center);
+				
+				game.startMoveAI();
+				
 				displayBoard();
 				revalidate();
-				repaint();
+				repaint();		
 			}
 
 
-
+			//Presses a button on the board
 			for (int row = 0; row < game.getBoard().length; row++) {
 				for (int col = 0; col < game.getBoard().length; col++) {
 					if (board[row][col] == e.getSource() && game.isEmpty(row,col)) {
@@ -226,6 +229,14 @@ public class SuperTicTacToePanel extends JPanel {
 						turnSelection [turn][0] = row;
 						turnSelection [turn][1] = col;
 						turn++;
+						
+						game.startMoveAI();
+						
+						game.tryToWinAI();
+						
+						game.blockUserAI();
+						
+						game.tacticsAI();
 					}
 				}
 			}
@@ -236,6 +247,9 @@ public class SuperTicTacToePanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "O won and "
 						+ "X lost!\n The game will reset");
 				game.reset();
+				
+				game.startMoveAI();
+				
 				displayBoard();
 				oWon.setText("" + 
 						(Integer.parseInt(oWon.getText()) + 1));
@@ -245,7 +259,10 @@ public class SuperTicTacToePanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "X won and "
 						+ "O lost!\n The game will reset");
 				game.reset();
-				displayBoard();
+			
+				game.startMoveAI();
+				
+				displayBoard();	
 				xWon.setText("" + 
 						(Integer.parseInt(xWon.getText()) + 1));
 			}
@@ -254,6 +271,9 @@ public class SuperTicTacToePanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "Tie game!" + 
 						"\n The game will reset");
 				game.reset();
+				
+				game.startMoveAI();
+				
 				displayBoard();
 			}
 
@@ -266,6 +286,7 @@ public class SuperTicTacToePanel extends JPanel {
 				else {
 					JOptionPane.showMessageDialog(null, "Cannot undo");
 				}
+				
 				displayBoard();
 			}
 		}
