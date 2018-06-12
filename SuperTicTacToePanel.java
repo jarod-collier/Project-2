@@ -41,13 +41,15 @@ public class SuperTicTacToePanel extends JPanel {
 	JPanel center;
 	ButtonListener listener;
 	
-
+	private boolean gameStart = true; 
+	private boolean cancel = false;
+	
+	
 	public SuperTicTacToePanel() {
 
-//		setLayout(new BorderLayout());
 		
 		bottom = new JPanel();
-//		center = new JPanel();
+
 
 		//Sets images for the icons
 		emptyIcon = new ImageIcon("blank.png");
@@ -69,8 +71,8 @@ public class SuperTicTacToePanel extends JPanel {
 
 		displayBoard();
 
-		bottom.setLayout (new GridLayout(4,2,2,2));
-
+		bottom.setLayout (new GridLayout(4,2,0,0));
+		
 		labxWins = new JLabel ("X Wins: ");
 		laboWins = new JLabel ("O Wins: ");
 		xWon = new JLabel ("0");
@@ -84,14 +86,9 @@ public class SuperTicTacToePanel extends JPanel {
 		bottom.add(undoButton);
 		bottom.add(resetButton);
 
-		// add all to contentPane
-
-		//		add (new JLabel("!!!!!!  Super TicTacToe  !!!!"), 
-		//				BorderLayout.NORTH);
-		add (bottom, BorderLayout.SOUTH);
-		add (center, BorderLayout.CENTER);
-//		add (center);
-//		add (bottom);
+		add (bottom);
+		add (center);
+		
 		
 
 	}
@@ -126,11 +123,19 @@ public class SuperTicTacToePanel extends JPanel {
 		// Asks user for the desired board size
 		boolean goodNum = false;
 
-		while (!goodNum) {
-			String boardSize = JOptionPane.showInputDialog(null, "Enter" +
-					" in the size of the board: \n (Must be 2 < n < 10)");
-
-			size = Integer.parseInt(boardSize);
+		while (!goodNum && !cancel) {
+			try {
+				String boardSize = JOptionPane.showInputDialog(null, "Enter" +
+						" in the size of the board: \n (Must be 2 < n < 10)");
+	
+				size = Integer.parseInt(boardSize);
+			}
+			catch(Exception e) {
+				 if (gameStart)
+					 System.exit(0);
+				 else 
+					 cancel = true;
+			}
 			if (size > 2 && size < 10)
 				goodNum = true;
 			else
@@ -142,7 +147,7 @@ public class SuperTicTacToePanel extends JPanel {
 		// Asks user for the desired number of connections
 		boolean goodConnection = false;
 
-		while (!goodConnection) {
+		while (!goodConnection && !cancel) {
 
 			String connections = JOptionPane.showInputDialog(null,
 					"Enter number of connections needed to win: "
@@ -155,33 +160,36 @@ public class SuperTicTacToePanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "Enter" +
 						" valid amount of connections.");
 		}
-
-		try {
-			game = new SuperTicTacToeGame(size, connectionsToWin);
-			turn = 0;
-			turnSelection = new int [size*size][2];
-		}
-		catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Enter" +
-					" valid parameters.");
-		}
-
-		
-		center = new JPanel();
-		center.setLayout(new GridLayout(size,size,3,2));
-		board = new JButton[size][size];
-
-		for (int row = 0; row < game.getBoard().length; row++)
-			for (int col = 0; col < game.getBoard().length; col++) {
-
-				Border thickBorder = new LineBorder(Color.blue, 2);
-
-				board[row][col] = new JButton ("", emptyIcon);
-				board[row][col].setBorder(thickBorder);
-
-				board[row][col].addActionListener(listener);
-				center.add(board[row][col]);
+		if (!cancel) {
+			try {
+				game = new SuperTicTacToeGame(size, connectionsToWin);
+				turn = 0;
+				turnSelection = new int [size*size][2];
+				gameStart = false;
 			}
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Enter" +
+						" valid parameters.");
+			}
+	
+			
+			center = new JPanel();
+			center.setLayout(new GridLayout(size,size,3,2));
+			board = new JButton[size][size];
+	
+			for (int row = 0; row < game.getBoard().length; row++)
+				for (int col = 0; col < game.getBoard().length; col++) {
+	
+					Border thickBorder = new LineBorder(Color.blue, 2);
+	
+					board[row][col] = new JButton ("", emptyIcon);
+					board[row][col].setBorder(thickBorder);
+	
+					board[row][col].addActionListener(listener);
+					center.add(board[row][col]);
+				}
+		}
+		cancel = false;
 	}
 
 
@@ -196,7 +204,7 @@ public class SuperTicTacToePanel extends JPanel {
 				game.reset();
 				remove(center);
 				createBoard();
-				add (center, BorderLayout.CENTER);
+				add (center);
 				displayBoard();
 				revalidate();
 				repaint();
