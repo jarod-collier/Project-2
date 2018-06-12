@@ -41,7 +41,6 @@ public class SuperTicTacToePanel extends JPanel {
 	JPanel center;
 	ButtonListener listener;
 	
-	
 
 	public SuperTicTacToePanel() {
 
@@ -193,19 +192,6 @@ public class SuperTicTacToePanel extends JPanel {
 				System.exit(0);
 
 			if (resetButton == e.getSource()) {
-<<<<<<< HEAD
-//				JOptionPane.showMessageDialog(null, "The game will reset");
-//				game.reset();
-//				displayBoard();
-		
-				SuperTicTacToe.main(new String[]{});
-				
-//				System.exit(0);
-				
-				//see if it works
-//				game = new SuperTicTacToeGame(6, 4);
-//				displayBoard();
-=======
 				JOptionPane.showMessageDialog(null, "The game will reset");
 				game.reset();
 				remove(center);
@@ -214,7 +200,6 @@ public class SuperTicTacToePanel extends JPanel {
 				displayBoard();
 				revalidate();
 				repaint();
->>>>>>> cfb61316a614e918518cd47523e36fd7dd893ef6
 			}
 
 
