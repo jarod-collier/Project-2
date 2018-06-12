@@ -148,12 +148,19 @@ public class SuperTicTacToePanel extends JPanel {
 		boolean goodConnection = false;
 
 		while (!goodConnection && !cancel) {
-
-			String connections = JOptionPane.showInputDialog(null,
-					"Enter number of connections needed to win: "
-							+ "\n (Must be >2 and less than the size of the board)");
-
-			connectionsToWin = Integer.parseInt(connections);
+			try {
+				String connections = JOptionPane.showInputDialog(null,
+						"Enter number of connections needed to win: "
+								+ "\n (Must be >2 and less than the size of the board)");
+	
+				connectionsToWin = Integer.parseInt(connections);
+			}
+			catch (Exception e) {
+				if (gameStart)
+					 System.exit(0);
+				 else 
+					 cancel = true;
+			}
 			if (connectionsToWin > 2 && connectionsToWin <= size)
 				goodConnection = true;
 			else
