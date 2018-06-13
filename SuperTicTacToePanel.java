@@ -44,7 +44,7 @@ public class SuperTicTacToePanel extends JPanel {
 	// status of each cell of the board
 	private CellStatus iCell;
 	
-	// declaring a new tic tac toe game
+	// declaring a new TicTacToe game
 	private SuperTicTacToeGame game;
 
 	// instance variables used to set up board and 
