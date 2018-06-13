@@ -54,11 +54,13 @@ public class SuperTicTacToePanel extends JPanel {
 	private int turn;
 	private int [][] turnSelection;
 	
+	private String moveFirst;
+	
 	// variable used to keep track of first turn 
 	// (1 = user, 2 = AI)
 	private int firstTurn;
 	
-	// booleans used when user tries to caneal
+	// booleans used when user tries to cancel
 	private boolean gameStart = true; 
 	private boolean cancel = false;
 	
@@ -186,15 +188,15 @@ public class SuperTicTacToePanel extends JPanel {
 				String connections = JOptionPane.showInputDialog(null,
 						"Enter number of connections needed to win: "
 								+ "\n (Must be >2 and less than the size of the board)");
-	
+
 				connectionsToWin = Integer.parseInt(connections);
 			}
 			catch (Exception e) {
 				// if the game just started
 				if (gameStart)
-					 System.exit(0);  	// exit the program
-				 else 
-					 cancel = true;     // set cancel to true
+					System.exit(0);  	// exit the program
+				else 
+					cancel = true;     // set cancel to true
 			}
 			if (connectionsToWin > 2 && connectionsToWin <= size)
 				goodConnection = true;
@@ -202,7 +204,42 @@ public class SuperTicTacToePanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "Enter" +
 						" valid amount of connections.");
 		}
-		
+
+		// asks user who should start
+		boolean goodFirstTurn = false;
+
+		// stays in loop until valid first turn
+		// is entered or user hits cancel
+		while (!goodFirstTurn && !cancel) {
+
+			// prompt user if they want to go first or second
+			try {
+				moveFirst = JOptionPane.showInputDialog(null,
+						"Enter '1' to go first or '2' to got second:");
+			}
+			catch (Exception e) {
+				// if the game just started
+				if (gameStart)
+					System.exit(0); 	// exit the program
+				else {
+					cancel = true;  	// set cancel to true
+				}
+			}
+			if (moveFirst.equals("1")) {
+				firstTurn = 1;
+				game.setTurnX();
+				goodFirstTurn = true;
+			} 
+			else if (moveFirst.equals("2")) {
+				firstTurn = 2;
+				game.setTurnO();
+				goodFirstTurn = true;
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Enter valid number");
+			}
+		}	
+			
 		// if the user didn't cancel
 		if (!cancel) {
 			// try to create a new game
@@ -217,33 +254,7 @@ public class SuperTicTacToePanel extends JPanel {
 						" valid parameters.");
 			}
 	
-			// prompt user if they want to go first or second
-			try {
-				String turn = JOptionPane.showInputDialog(null,
-						"Enter '1' to go first or '2' to got second:");
-				if (turn.equals("1")) {
-					firstTurn = 1;
-					game.setTurnX();
-				} 
-				else if (turn.equals("2")) {
-					firstTurn = 2;
-					game.setTurnO();
-				}
-				else {
-					throw new IllegalArgumentException();
-				}
-			}
-			catch (IllegalArgumentException e) {
-				if (gameStart)
-					JOptionPane.showMessageDialog(null, "Enter valid number");
-			}
-			catch (Exception e) {
-				// if the game just started
-				if (gameStart)
-					 System.exit(0); 	// exit the program
-				 else 
-					 cancel = true;  	// set cancel to true
-			}
+			
 			
 			// create new panel for the board, set layout
 			center = new JPanel();
@@ -308,6 +319,7 @@ public class SuperTicTacToePanel extends JPanel {
 				repaint();		
 				
 				game.commandAI();
+				displayBoard();
 			}
 
 
@@ -325,6 +337,8 @@ public class SuperTicTacToePanel extends JPanel {
 						
 						// increment turn
 						turn++;
+						displayBoard();
+						checkForEndGame();
 						
 						int selection [];
 						selection = game.commandAI();
@@ -335,74 +349,16 @@ public class SuperTicTacToePanel extends JPanel {
 						
 						// increment turn
 						turn++;
+						
+						displayBoard();
+						checkForEndGame();
 					}
 				}
 			}
 
 			displayBoard();
 
-			// checking if O (AI) won
-			if (game.getGameStatus() == GameStatus.O_WON) {
-				JOptionPane.showMessageDialog(null, "O won and "
-						+ "X lost!\n The game will reset");
-				game.reset();
-				
-				if (firstTurn == 1) {
-					game.setTurnX();
-				}
-				if (firstTurn == 2) {
-					game.setTurnO();
-				}
-				turn = 0;
-				turnSelection = new int [size*size][2];
-				game.commandAI();
-				
-				displayBoard();
-				oWon.setText("" + 
-						(Integer.parseInt(oWon.getText()) + 1));
-			}
-
-			// checking if X (user) won
-			if (game.getGameStatus() == GameStatus.X_WON) {
-				JOptionPane.showMessageDialog(null, "X won and "
-						+ "O lost!\n The game will reset");
-				game.reset();
 			
-				if (firstTurn == 1) {
-					game.setTurnX();
-				}
-				if (firstTurn == 2) {
-					game.setTurnO();
-				}
-				turn = 0;
-				turnSelection = new int [size*size][2];
-				game.commandAI(); 
-				
-				displayBoard();	
-				xWon.setText("" + 
-						(Integer.parseInt(xWon.getText()) + 1));
-			}
-
-			// checking if game is a tie
-			if (game.getGameStatus() == GameStatus.CATS) {
-				JOptionPane.showMessageDialog(null, "Tie game!" + 
-						"\n The game will reset");
-				game.reset();
-				
-				
-				if (firstTurn == 1) {
-					game.setTurnX();
-				}
-				if (firstTurn == 2) {
-					game.setTurnO();
-				}
-				turn = 0;
-				turnSelection = new int [size*size][2];
-				game.commandAI();
-				
-				displayBoard();
-			}
-
 			// undo button is clicked 
 			if (undoButton == e.getSource()) {
 				if (turn >= 2) {
@@ -417,6 +373,72 @@ public class SuperTicTacToePanel extends JPanel {
 				
 				displayBoard();
 			}
+		}
+	}
+	
+	public void checkForEndGame () {
+		
+		// checking if O (AI) won
+		if (game.getGameStatus() == GameStatus.O_WON) {
+			JOptionPane.showMessageDialog(null, "O won and "
+					+ "X lost!\n The game will reset");
+			game.reset();
+
+			if (firstTurn == 1) {
+				game.setTurnX();
+			}
+			if (firstTurn == 2) {
+				game.setTurnO();
+			}
+			turn = 0;
+			turnSelection = new int [size*size][2];
+			game.commandAI();
+
+			displayBoard();
+			oWon.setText("" + 
+					(Integer.parseInt(oWon.getText()) + 1));
+		}
+		
+		
+		// checking if X (user) won
+		if (game.getGameStatus() == GameStatus.X_WON) {
+			JOptionPane.showMessageDialog(null, "X won and "
+					+ "O lost!\n The game will reset");
+			game.reset();
+
+			if (firstTurn == 1) {
+				game.setTurnX();
+			}
+			if (firstTurn == 2) {
+				game.setTurnO();
+			}
+			turn = 0;
+			turnSelection = new int [size*size][2];
+			game.commandAI(); 
+
+			displayBoard();	
+			xWon.setText("" + 
+					(Integer.parseInt(xWon.getText()) + 1));
+		}
+
+		// checking if game is a tie
+		if (game.getGameStatus() == GameStatus.CATS) {
+			JOptionPane.showMessageDialog(null, "Tie game!" + 
+					"\n The game will reset");
+			game.reset();
+
+
+			if (firstTurn == 1) {
+				game.setTurnX();
+			}
+			if (firstTurn == 2) {
+				game.setTurnO();
+			}
+			turn = 0;
+			turnSelection = new int [size*size][2];
+			game.commandAI();
+
+			displayBoard();
 		}
 	}
 }
