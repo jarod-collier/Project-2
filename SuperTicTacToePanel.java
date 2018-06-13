@@ -234,9 +234,9 @@ public class SuperTicTacToePanel extends JPanel {
 						
 						game.tryToWinAI();
 						
-						game.blockUserAI();
-						
-						game.tacticsAI();
+//						game.blockUserAI();
+//						
+//						game.tacticsAI();
 					}
 				}
 			}
