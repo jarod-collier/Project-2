@@ -176,8 +176,6 @@ public class SuperTicTacToeGame {
 			for (int c = 0; c < size; c++) 
 				board[r][c] = CellStatus.EMPTY;
 
-		turn = CellStatus.X;
-
 		status = isWinner();
 	}
 
@@ -534,7 +532,7 @@ public class SuperTicTacToeGame {
 						//Attempts to move down
 						for (int con = 1; con < connections; con++) {
 							if (getCell((row + con) % size, col)
-									== CellStatus.EMPTY) 
+									!= CellStatus.X) 
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 1 &&
@@ -553,7 +551,7 @@ public class SuperTicTacToeGame {
 						//Attempts to move up
 						for (int con = 1; con < connections; con++) {
 							if (getCell((row + size - con - 1) % size,
-									col) == CellStatus.EMPTY) 
+									col) != CellStatus.X) 
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 1 &&
@@ -584,12 +582,12 @@ public class SuperTicTacToeGame {
 						//Attempts to move left
 						for (int con = 1; con < connections; con++) {
 							if (getCell(row, (col + size - con) % size)
-									== CellStatus.EMPTY) 
+									!= CellStatus.X) 
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 1 &&
 								getCell(row, (col + size - 1) % size) 
-								== CellStatus.EMPTY) {
+								!= CellStatus.X) {
 							System.out.println("going left");
 							select(row, (col + size - 1) % size);
 							attemptToWin = 0;
@@ -619,7 +617,6 @@ public class SuperTicTacToeGame {
 						else
 							attemptToWin = 0;
 					}
-
 				}
 			}
 
