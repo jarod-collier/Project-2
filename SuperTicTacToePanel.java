@@ -54,6 +54,10 @@ public class SuperTicTacToePanel extends JPanel {
 	private int turn;
 	private int [][] turnSelection;
 	
+	// variable used to keep track of first turn 
+	// (1 = user, 2 = AI)
+	private int firstTurn;
+	
 	// booleans used when user tries to caneal
 	private boolean gameStart = true; 
 	private boolean cancel = false;
@@ -218,9 +222,11 @@ public class SuperTicTacToePanel extends JPanel {
 				String turn = JOptionPane.showInputDialog(null,
 						"Enter '1' to go first or '2' to got second:");
 				if (turn.equals("1")) {
+					firstTurn = 1;
 					game.setTurnX();
 				} 
 				else if (turn.equals("2")) {
+					firstTurn = 2;
 					game.setTurnO();
 				}
 				else {
@@ -263,6 +269,8 @@ public class SuperTicTacToePanel extends JPanel {
 		
 		// set cancel to false
 		cancel = false;
+		
+		game.commandAI();
 	}
 
 
@@ -280,16 +288,26 @@ public class SuperTicTacToePanel extends JPanel {
 				
 				// reset game, create new board, add new center panel
 				game.reset();
+				
+				if (firstTurn == 1) {
+					game.setTurnX();
+				}
+				if (firstTurn == 2) {
+					game.setTurnO();
+				}
+				
 				remove(center);
 				createBoard();
 				add (center);
 				
-				game.commandAI(); 
 				
+				 
 				// display new board
 				displayBoard();
 				revalidate();
 				repaint();		
+				
+				game.commandAI();
 			}
 
 
@@ -329,6 +347,14 @@ public class SuperTicTacToePanel extends JPanel {
 						+ "X lost!\n The game will reset");
 				game.reset();
 				
+				if (firstTurn == 1) {
+					game.setTurnX();
+				}
+				if (firstTurn == 2) {
+					game.setTurnO();
+				}
+				turn = 0;
+				turnSelection = new int [size*size][2];
 				game.commandAI();
 				
 				displayBoard();
@@ -342,6 +368,14 @@ public class SuperTicTacToePanel extends JPanel {
 						+ "O lost!\n The game will reset");
 				game.reset();
 			
+				if (firstTurn == 1) {
+					game.setTurnX();
+				}
+				if (firstTurn == 2) {
+					game.setTurnO();
+				}
+				turn = 0;
+				turnSelection = new int [size*size][2];
 				game.commandAI(); 
 				
 				displayBoard();	
@@ -355,6 +389,15 @@ public class SuperTicTacToePanel extends JPanel {
 						"\n The game will reset");
 				game.reset();
 				
+				
+				if (firstTurn == 1) {
+					game.setTurnX();
+				}
+				if (firstTurn == 2) {
+					game.setTurnO();
+				}
+				turn = 0;
+				turnSelection = new int [size*size][2];
 				game.commandAI();
 				
 				displayBoard();

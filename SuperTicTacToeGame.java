@@ -176,8 +176,6 @@ public class SuperTicTacToeGame {
 			for (int c = 0; c < size; c++) 
 				board[r][c] = CellStatus.EMPTY;
 
-		turn = CellStatus.X;
-
 		status = isWinner();
 	}
 
