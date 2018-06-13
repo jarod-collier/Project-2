@@ -255,7 +255,7 @@ public class SuperTicTacToeGame {
 
 					if ((numToWin == connections - 1) && 
 							status == GameStatus.IN_PROGRESS) {
-
+						
 						//Looks at the space to the right
 						if (board[row][(col + connections - 1) % size] 
 								== CellStatus.EMPTY) {
@@ -269,8 +269,54 @@ public class SuperTicTacToeGame {
 							select(row, (col + size - 1) % size);
 						}
 					}
-				}
-			}
+					
+//					//Looks if going in the middle will win
+//							if (board[row][col] == CellStatus.O && 
+//									board[row][(col + connections - 1) % size] 
+//											== CellStatus.O) {
+//								int attemptToWin = 0;
+//								System.out.println("Horizontal middle - row: " + row
+//										+ " \n col: " + col);
+//
+//								//Checks middle going left horizontally
+//								for (int con = 1; con < connections - 1; con++) {
+//									if (getCell(row, (col + size - con) % size)
+//											== CellStatus.EMPTY) 
+//										attemptToWin++;							
+//								}
+//								if (attemptToWin == connections - 2 &&
+//										getCell(row, (col + size - 1) % size) 
+//										== CellStatus.EMPTY) {
+//									System.out.println("going left");
+//									select(row, (col + size - 1) % size);
+//									attemptToWin = 0;
+//									return;
+//								}
+//								else
+//									attemptToWin = 0;
+//
+//								//Checks middle going right horizontally
+//								for (int con = 1; con < connections; con++) {
+//									if (getCell(row, (col + size + con) % size)
+//											== CellStatus.EMPTY) 
+//										attemptToWin++;							
+//								}
+//								if (attemptToWin == connections - 1 &&
+//										getCell(row, (col + size + 1) % size) 
+//										== CellStatus.EMPTY) {
+//									System.out.println("going right");
+//									select(row, (col + size + 1) % size);
+//									attemptToWin = 0;
+//									return;
+//								}
+//								else
+//									attemptToWin = 0;
+//							}
+
+						}
+					}
+				
+			
 
 
 			//Checks if O about to win vertically
