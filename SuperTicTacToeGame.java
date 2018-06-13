@@ -476,6 +476,62 @@ public class SuperTicTacToeGame {
 					}
 				}
 			}
+			//Looks if going in the middle horizontally will win
+			for (int row = 0; row < size; row++) {
+				for (int col = 0; col < size; col++) {
+
+					if (board[row][col] == CellStatus.X && 
+							board[row][(col + connections - 1) % size] 
+									== CellStatus.X &&
+									board[row][(col + connections - 2)
+									           % size] == 
+									           CellStatus.EMPTY &&
+									           board[row][(col + size + 1) % size] 
+									        		   != CellStatus.X) {
+						int attemptToWin = 0;
+						System.out.println("Horizontal middle - row: " + row
+								+ " \n col: " + col);
+
+						//Checks middle going left horizontally
+						for (int con = 1; con < connections - 1; con++) {
+							if (getCell(row, (col + size - con) % size)
+									== CellStatus.EMPTY) 
+								attemptToWin++;							
+						}
+						if (attemptToWin == connections - 2 &&
+								getCell(row, (col + size - 1) % size) 
+								== CellStatus.EMPTY) {
+							System.out.println("going left");
+							select(row, (col + size - 1) % size);
+							attemptToWin = 0;
+							selection[0] = row;
+							selection[1] = (col + size - 1) % size;
+							return selection;
+						}
+						else
+							attemptToWin = 0;
+
+						//Checks middle going right horizontally
+						for (int con = 1; con < connections - 1; con++) {
+							if (getCell(row, (col + size + con) % size)
+									== CellStatus.EMPTY) 
+								attemptToWin++;							
+						}
+						if (attemptToWin == connections - 2 &&
+								getCell(row, (col + size + 1) % size) 
+								== CellStatus.EMPTY) {
+							System.out.println("going right");
+							select(row, (col + size + 1) % size);
+							attemptToWin = 0;
+							selection[0] = row;
+							selection[1] = (col + size + 1) % size;
+							return selection;
+						}
+						else
+							attemptToWin = 0;
+					}
+				}
+			}
 
 
 			//Checks if X is about to win vertically
@@ -514,6 +570,64 @@ public class SuperTicTacToeGame {
 					}
 				}
 			}
+			
+			//Looks if going in the middle Vertically will win
+			for (int col = 0; col < size; col++) {
+				for (int row = 0; row < size; row++) {
+
+					if (board[row][col] == CellStatus.X && 
+							board[(row + connections - 1) % size][col] 
+									== CellStatus.X &&
+									board[(row + connections - 2)
+									      % size][col] == CellStatus.
+									      EMPTY && board[(row + size +
+									    		  1) % size][col] 
+									    				  != CellStatus.X) {
+						int attemptToWin = 0;
+						System.out.println("Horizontal middle - row: " + row
+								+ " \n col: " + col);
+
+						//Checks middle going up vertically
+						for (int con = 1; con < connections - 1; con++) {
+							if (getCell((row + size - con) % size, col)
+									== CellStatus.EMPTY) 
+								attemptToWin++;							
+						}
+						if (attemptToWin == connections - 2 &&
+								getCell((row + size - 1) % size, col) 
+								== CellStatus.EMPTY) {
+							System.out.println("going up");
+							select((row + size - 1) % size, col);
+							attemptToWin = 0;
+							selection[0] = (row + size - 1) % size;
+							selection[1] = col;
+							return selection;
+						}
+						else
+							attemptToWin = 0;
+
+						//Checks middle going down vertically
+						for (int con = 1; con < connections - 1; con++) {
+							if (getCell((row + size + con) % size, col)
+									== CellStatus.EMPTY) 
+								attemptToWin++;							
+						}
+						if (attemptToWin == connections - 2 &&
+								getCell((row + size + 1) % size, col) 
+								== CellStatus.EMPTY) {
+							System.out.println("going down");
+							select((row + size + 1) % size, col);
+							attemptToWin = 0;
+							selection[0] = (row + size + 1) % size;
+							selection[1] = col;
+							return selection;
+						}
+						else
+							attemptToWin = 0;
+					}
+				}
+			}
+			
 		}
 
 		//tacticsAI

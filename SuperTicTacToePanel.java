@@ -157,8 +157,9 @@ public class SuperTicTacToePanel extends JPanel {
 		// user hits cancel
 		while (!goodNum && !cancel) {
 			try {
-				String boardSize = JOptionPane.showInputDialog(null, "Enter" +
-						" in the size of the board: \n (Must be 2 < n < 10)");
+				String boardSize = JOptionPane.showInputDialog(null,
+						"Enter in the size of the board:"
+						+ " \n (Must be 2 < n < 10)");
 
 				size = Integer.parseInt(boardSize);
 			}
@@ -185,7 +186,8 @@ public class SuperTicTacToePanel extends JPanel {
 			try {
 				String connections = JOptionPane.showInputDialog(null,
 						"Enter number of connections needed to win: "
-								+ "\n (Must be >2 and less than the size of the board)");
+								+ "\n (Must be >2 and less than the "
+								+ "size of the board)");
 	
 				connectionsToWin = Integer.parseInt(connections);
 			}
@@ -235,7 +237,8 @@ public class SuperTicTacToePanel extends JPanel {
 			}
 			catch (IllegalArgumentException e) {
 				if (gameStart)
-					JOptionPane.showMessageDialog(null, "Enter valid number");
+					JOptionPane.showMessageDialog(null,
+							"Enter valid number");
 			}
 			catch (Exception e) {
 				// if the game just started
