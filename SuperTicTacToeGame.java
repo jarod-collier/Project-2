@@ -238,11 +238,15 @@ public class SuperTicTacToeGame {
 				select(row, col);
 				selection[0] = row;
 				selection[1] = col;
+				return selection;
 			}
 			count = 0;
-			
-			//TryToWinAI
-			
+		}
+
+		//TryToWinAI
+		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
+
+
 			//Checks if O about to win horizontally
 			for (int row = 0; row < size; row++) {
 				for (int col = 0; col < size; col++) {
@@ -265,7 +269,7 @@ public class SuperTicTacToeGame {
 									(col + connections - 1) % size);
 							selection[0] = row;
 							selection[1] = (col + connections - 1) % size;
-							
+
 						}
 
 						//Looks at the space to the left
@@ -274,7 +278,7 @@ public class SuperTicTacToeGame {
 							select(row, (col + size - 1) % size);
 							selection[0] = row;
 							selection[1] = (col + size - 1) % size;
-							
+
 						}
 					}
 
@@ -373,7 +377,7 @@ public class SuperTicTacToeGame {
 					}
 				}
 			}
-			
+
 			//Looks if going in the middle Vertically will win
 			for (int col = 0; col < size; col++) {
 				for (int row = 0; row < size; row++) {
@@ -386,7 +390,7 @@ public class SuperTicTacToeGame {
 									      % size][col] == CellStatus.
 									      EMPTY && board[(row + size +
 									    		  1) % size][col] 
-									        		   != CellStatus.O) {
+									    				  != CellStatus.O) {
 						int attemptToWin = 0;
 						System.out.println("Horizontal middle - row: " + row
 								+ " \n col: " + col);
@@ -431,8 +435,11 @@ public class SuperTicTacToeGame {
 					}
 				}
 			}
-			
-			//blockUserAI
+		}
+
+		//blockUserAI
+		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
+
 			//Checks if X about to win horizontally
 			for (int row = 0; row < size; row++) {
 				for (int col = 0; col < size; col++) {
@@ -505,8 +512,12 @@ public class SuperTicTacToeGame {
 					}
 				}
 			}
-			
-			//tacticsAI
+		}
+
+		//tacticsAI
+
+		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
+
 			//Tactically moves up or down
 			for (int col = 0; col < size; col++) {
 				for (int row = 0; row < size; row++) {
@@ -623,8 +634,9 @@ public class SuperTicTacToeGame {
 			selection[0] = randR;
 			selection[1] = randC;
 			return selection;
-			
 		}
+
+
 		return selection;
 	}
 
