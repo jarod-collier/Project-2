@@ -219,7 +219,7 @@ public class SuperTicTacToeGame {
 			turn = CellStatus.O;
 	}
 
-	public int [] startMoveAI() {
+	public int [] commandAI() {
 		int selection [] = {0,0};
 		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
 			Random r = new Random();
@@ -241,14 +241,9 @@ public class SuperTicTacToeGame {
 				selection[1] = col;
 			}
 			count = 0;
-		}
-		return selection;
-	}
-
-	public void tryToWinAI() {
-
-		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
-
+			
+			//TryToWinAI
+			
 			//Checks if O about to win horizontally
 			for (int row = 0; row < size; row++) {
 				for (int col = 0; col < size; col++) {
@@ -269,12 +264,18 @@ public class SuperTicTacToeGame {
 								== CellStatus.EMPTY) {
 							select(row, 
 									(col + connections - 1) % size);
+							selection[0] = row;
+							selection[1] = (col + connections - 1) % size;
+							
 						}
 
 						//Looks at the space to the left
 						else if (board[row][(col + size - 1) % size] 
 								== CellStatus.EMPTY) {
 							select(row, (col + size - 1) % size);
+							selection[0] = row;
+							selection[1] = (col + size - 1) % size;
+							
 						}
 					}
 
@@ -310,7 +311,9 @@ public class SuperTicTacToeGame {
 							System.out.println("going left");
 							select(row, (col + size - 1) % size);
 							attemptToWin = 0;
-							return;
+							selection[0] = row;
+							selection[1] = (col + size - 1) % size;
+							return selection;
 						}
 						else
 							attemptToWin = 0;
@@ -327,7 +330,9 @@ public class SuperTicTacToeGame {
 							System.out.println("going right");
 							select(row, (col + size + 1) % size);
 							attemptToWin = 0;
-							return;
+							selection[0] = row;
+							selection[1] = (col + size + 1) % size;
+							return selection;
 						}
 						else
 							attemptToWin = 0;
@@ -355,12 +360,16 @@ public class SuperTicTacToeGame {
 						if (board [(row + size % size)][col] 
 								== CellStatus.EMPTY ) {
 							select((row + size % size), col);
+							selection[0] = (row + size % size);
+							selection[1] = col;
 						}
 						//Looks at the space below
 						else if (board[(row + connections - 1) % size]
 								[col] == CellStatus.EMPTY)  {
 							select((row + connections - 1) % size,
 									col);
+							selection[0] = (row + connections - 1) % size;
+							selection[1] = col;
 						}
 					}
 				}
@@ -395,7 +404,9 @@ public class SuperTicTacToeGame {
 							System.out.println("going up");
 							select((row + size - 1) % size, col);
 							attemptToWin = 0;
-							return;
+							selection[0] = (row + size - 1) % size;
+							selection[1] = col;
+							return selection;
 						}
 						else
 							attemptToWin = 0;
@@ -412,20 +423,17 @@ public class SuperTicTacToeGame {
 							System.out.println("going down");
 							select((row + size + 1) % size, col);
 							attemptToWin = 0;
-							return;
+							selection[0] = (row + size + 1) % size;
+							selection[1] = col;
+							return selection;
 						}
 						else
 							attemptToWin = 0;
 					}
 				}
 			}
-		}
-
-	}
-
-	public void blockUserAI() {
-		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
-
+			
+			//blockUserAI
 			//Checks if X about to win horizontally
 			for (int row = 0; row < size; row++) {
 				for (int col = 0; col < size; col++) {
@@ -446,19 +454,23 @@ public class SuperTicTacToeGame {
 								== CellStatus.EMPTY) {
 							select(row, 
 									(col + connections - 1) % size);
+							selection[0] = row;
+							selection[1] = (col + connections - 1) % size;
 						}
 
 						//Looks at the space to the left
 						else if (board[row][(col + size - 1) % size] 
 								== CellStatus.EMPTY) {
 							select(row, (col + size - 1) % size);
+							selection[0] = row;
+							selection[1] = (col + size - 1) % size;
 						}
 					}
 				}
 			}
 
 
-			//Checks if X about to win vertically
+			//Checks if X is about to win vertically
 			for (int col = 0; col < size; col++) {
 				for (int row = 0; row < size; row++) {
 
@@ -477,25 +489,25 @@ public class SuperTicTacToeGame {
 						if (board [(row + size % size)][col] 
 								== CellStatus.EMPTY ) {
 							select((row + size % size), col);
-							return;
+							selection[0] = (row + size % size);
+							selection[1] = col;
+							return selection;
 						}
 						//Looks at the space below
 						else if (board[(row + connections - 1) % size]
 								[col] == CellStatus.EMPTY)  {
 							select((row + connections - 1) % size, 
 									col);
-							return;
+							selection[0] = (row + connections - 1) % size;
+							selection[1] = col;
+							return selection;
 						}
 
 					}
 				}
 			}
-		}
-	}
-
-	public void tacticsAI() {
-		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
-
+			
+			//tacticsAI
 			//Tactically moves up or down
 			for (int col = 0; col < size; col++) {
 				for (int row = 0; row < size; row++) {
@@ -517,7 +529,9 @@ public class SuperTicTacToeGame {
 							System.out.println("going down");
 							select((row + 1) % size, col);
 							attemptToWin = 0;
-							return;
+							selection[0] = (row + 1) % size;
+							selection[1] = col;
+							return selection;
 						}
 						else
 							attemptToWin = 0;
@@ -534,7 +548,9 @@ public class SuperTicTacToeGame {
 							System.out.println("going up");
 							select((row + size - 1) % size, col);
 							attemptToWin = 0;
-							return;
+							selection[0] = (row + size - 1) % size;
+							selection[1] = col;
+							return selection;
 						}
 						else
 							attemptToWin = 0;
@@ -563,7 +579,9 @@ public class SuperTicTacToeGame {
 							System.out.println("going left");
 							select(row, (col + size - 1) % size);
 							attemptToWin = 0;
-							return;
+							selection[0] = row;
+							selection[1] = (col + size - 1) % size;
+							return selection;
 						}
 						else
 							attemptToWin = 0;
@@ -580,7 +598,9 @@ public class SuperTicTacToeGame {
 							System.out.println("going right");
 							select(row, (col + size + 1) % size);
 							attemptToWin = 0;
-							return;
+							selection[0] = row;
+							selection[1] = (col + size + 1) % size;
+							return selection;
 						}
 						else
 							attemptToWin = 0;
@@ -592,19 +612,23 @@ public class SuperTicTacToeGame {
 			//If no tactical move exits, randomly move
 			Random rand = new Random();
 
-			int r = (rand.nextInt(size));
-			int c = (rand.nextInt(size));
+			int randR = (rand.nextInt(size));
+			int randC = (rand.nextInt(size));
 
-			while( getCell(r, c) != CellStatus.EMPTY) {
-				r = (rand.nextInt(size));
-				c = (rand.nextInt(size));
+			while( getCell(randR, randC) != CellStatus.EMPTY) {
+				randR = (rand.nextInt(size));
+				randC = (rand.nextInt(size));
 			}
 			System.out.println("Randomly moving");
-			select(r,c);
-			return;
-
+			select(randR,randC);
+			selection[0] = randR;
+			selection[1] = randC;
+			return selection;
+			
 		}
+		return selection;
 	}
+
 
 	public void setTurnX () {
 		turn = CellStatus.X;
