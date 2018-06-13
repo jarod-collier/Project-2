@@ -254,13 +254,17 @@ public class SuperTicTacToePanel extends JPanel {
 						turnSelection [turn][1] = col;
 						turn++;
 						
-						game.startMoveAI();
+						int selection [];
+						selection = game.startMoveAI();
 						
-						game.tryToWinAI();
+//						game.tryToWinAI();
 						
 //						game.blockUserAI();
 //						
 //						game.tacticsAI();
+						turnSelection [turn][0] = selection[0];
+						turnSelection [turn][1] = selection[1];
+						turn++;
 					}
 				}
 			}
@@ -303,9 +307,10 @@ public class SuperTicTacToePanel extends JPanel {
 
 
 			if (undoButton == e.getSource()) {
-				if (turn >= 1) {
+				if (turn >= 2) {
 					game.undo(turnSelection[turn-1][0],turnSelection[turn-1][1]);
-					turn--;
+					game.undo(turnSelection[turn-2][0],turnSelection[turn-2][1]);
+					turn = turn - 2;
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "Cannot undo");

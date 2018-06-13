@@ -217,7 +217,8 @@ public class SuperTicTacToeGame {
 			turn = CellStatus.O;
 	}
 
-	public void startMoveAI() {
+	public int [] startMoveAI() {
+		int selection [] = {0,0};
 		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
 			Random r = new Random();
 
@@ -230,11 +231,16 @@ public class SuperTicTacToeGame {
 					}
 				}
 			}
-			if (count == size * size) 
-				select((r.nextInt(size)), (r.nextInt(size)));
-
+			if (count == size * size) {
+				int row = r.nextInt(size);
+				int col = r.nextInt(size);
+				select(row, col);
+				selection[0] = row;
+				selection[1] = col;
+			}
 			count = 0;
 		}
+		return selection;
 	}
 
 	public void tryToWinAI() {
