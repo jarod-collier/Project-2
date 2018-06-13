@@ -2,8 +2,6 @@ package package1;
 
 import javax.swing.JFrame;
 
-import java.awt.event.WindowEvent;
-
 /**********************************************************************
 Creates the GUI for the TicTacToe board
 
@@ -25,9 +23,6 @@ public class SuperTicTacToe {
 		JFrame frame = new JFrame ("Jarod and Ben's Super TicTacToe!");
 		frame.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-		
-		frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-		frame.setVisible(false);
 
 		// creating new TicTacToe panel and adding it to the frame
 		SuperTicTacToePanel panel = new SuperTicTacToePanel();

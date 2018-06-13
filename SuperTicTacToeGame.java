@@ -4,7 +4,7 @@ import java.util.Random;
 
 
 /**********************************************************************
- * This class handles all of the game logic for Tic Tac Toe
+ * This class handles all of the logic for our Super TicTacToe game
  * 
  * @author Jarod Collier and Ben Burger
  * @version 5/31/18
@@ -28,7 +28,15 @@ public class SuperTicTacToeGame {
 	private int connections;
 
 	/******************************************************************
-	 * Default constructor for SuperTicTacToeGame class
+	 * Constructor for the TicTacToe Game
+	 * @param int size which is the number of rows and columns
+	 * @param int connections which is how many in a row are needed
+	 * @throws IllegalArgumentException for having board size <2
+	 * @throws IllegalArgumentException for having board size >10
+	 * @throws IllegalArgumentException for having board connections
+	 * less than 3
+	 * @throws IllegalArgumentException for having board connections
+	 * greater than the size of the board 
 	 *****************************************************************/
 	public SuperTicTacToeGame(int size, int connections) {
 		if (size <= 2)
@@ -47,6 +55,7 @@ public class SuperTicTacToeGame {
 			throw new IllegalArgumentException("Connections " +
 					"can not be greater than board size");
 
+		//Let's the game now it has started playing
 		status = GameStatus.IN_PROGRESS;
 
 		this.connections = connections;
@@ -54,17 +63,18 @@ public class SuperTicTacToeGame {
 		this.size = size;
 		board = new CellStatus[size][size];
 
+		//Sets each cell to empty
 		for (int row = 0; row < size; row++) {
 			for (int col = 0; col < size; col++)
 				board[row][col] = CellStatus.EMPTY;
 		}
-
-		//		turn = CellStatus.X;
 	}
 
 	/******************************************************************
 	 * Returns the TicTacToe board
-	 * @return board for the TicTacToe game
+	 * @param none
+	 * @return CellStatus[][] - a board for the TicTacToe game
+	 * @throws none
 	 *****************************************************************/
 	public CellStatus[][] getBoard() {
 		return board;
@@ -76,6 +86,8 @@ public class SuperTicTacToeGame {
 	 * @param col of the TicTacToe board
 	 *****************************************************************/
 	public void select (int row, int col) {
+
+		//Makes sure the cell being clicked is empty
 		if (board[row][col] != CellStatus.EMPTY)
 			return;
 
@@ -83,6 +95,7 @@ public class SuperTicTacToeGame {
 
 		board[row][col] = turn;
 
+		//Once a selection has been made, change who's turn it is
 		if (turn == CellStatus.O)
 			turn = CellStatus.X;
 		else
@@ -93,7 +106,9 @@ public class SuperTicTacToeGame {
 
 	/******************************************************************
 	 * Creates the logic on how to win the TicTacToe game
-	 * @return GameStatus.IN_PROGRESS enum variable
+	 * @param none
+	 * @return GameStatus of the game - who won, a tie, or in progress
+	 * @throws none
 	 *****************************************************************/
 	private GameStatus isWinner() {
 
@@ -164,12 +179,15 @@ public class SuperTicTacToeGame {
 		if (count == size * size)
 			return GameStatus.CATS;
 
+		// If nothing else returned, the game is still in progress
 		return GameStatus.IN_PROGRESS;
 	}
 
 	/******************************************************************
 	 * Resets the TicTacToe Board
-	 * @return void - the board just needs to be reset
+	 * @param none
+	 * @return none
+	 * @throws none
 	 *****************************************************************/
 	public void reset() {
 		for (int r = 0; r < size; r++) 
@@ -180,9 +198,10 @@ public class SuperTicTacToeGame {
 	}
 
 	/******************************************************************
-	 * Called from the SuperTicTacToePanel class and indicates
-	 * if a player has won the game
-	 * @return
+	 * Returns whatever the GameStatus is for the TicTacToe game
+	 * @param none
+	 * @return GameStatus status of the game
+	 * @throws none
 	 *****************************************************************/
 	public GameStatus getGameStatus() {
 		return status;
@@ -203,11 +222,19 @@ public class SuperTicTacToeGame {
 	 * @param row of the TicTacToe board
 	 * @param col of the TicTacToe board
 	 * @return true or false whether cell is empty
+	 * @throws none
 	 *****************************************************************/
 	public boolean isEmpty(int row, int col) {
 		return board[row][col] == CellStatus.EMPTY;
 	}
 
+	/******************************************************************
+	 * Undoes whatever action the user and AI just did
+	 * @param row of the TicTacToe board
+	 * @param col of the TicTacToe board
+	 * @return none
+	 * @throws none
+	 *****************************************************************/
 	public void undo (int row, int col) {
 		board[row][col] = CellStatus.EMPTY;
 		if (turn == CellStatus.O)
@@ -216,12 +243,20 @@ public class SuperTicTacToeGame {
 			turn = CellStatus.O;
 	}
 
+	/******************************************************************
+	 * Determines the logic for how the AI interacts with the game
+	 * @param none
+	 * @return Integer Array of the the coordinates that the AI selects
+	 * @throws none
+	 *****************************************************************/
 	public int [] commandAI() {
+
+		//Creates the array that holds coordinates of AI's move
 		int selection [] = {0,0};
-		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
+		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS){
 			Random r = new Random();
 
-			//Selects place to initially go
+			//Checks if there are no other O cells on the board
 			int count = 0;
 			for (int row = 0; row < size; row++) {
 				for (int col = 0; col < size; col++) {
@@ -230,6 +265,8 @@ public class SuperTicTacToeGame {
 					}
 				}
 			}
+
+			//Selects place to initially go if no other O cells
 			if (count == size * size) {
 				int row = r.nextInt(size);
 				int col = r.nextInt(size);
@@ -241,11 +278,11 @@ public class SuperTicTacToeGame {
 			count = 0;
 		}
 
-		//TryToWinAI
-		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
+		//The logic that checks if the AI can win
+		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS){
 
 
-			//Checks if O about to win horizontally
+			//Checks if O (AI) is about to win horizontally
 			for (int row = 0; row < size; row++) {
 				for (int col = 0; col < size; col++) {
 
@@ -260,20 +297,21 @@ public class SuperTicTacToeGame {
 					if ((numToWin == connections - 1) && 
 							status == GameStatus.IN_PROGRESS) {
 
-						//Looks at the space to the right
-						if (board[row][(col + connections - 1) % size] 
-								== CellStatus.EMPTY) {
+						//Looks at the space to the right to win
+						if (isEmpty(row, 
+								(col + connections - 1) % size)){
 							select(row, 
 									(col + connections - 1) % size);
 							selection[0] = row;
-							selection[1] = (col + connections - 1) % size;
+							selection[1] = (col + connections - 1)
+									% size;
 							return selection;
 
 						}
 
-						//Looks at the space to the left
-						else if (board[row][(col + size - 1) % size] 
-								== CellStatus.EMPTY) {
+						//Looks at the space to the left to win
+						else if (isEmpty(row,
+								(col + size - 1) % size)){
 							select(row, (col + size - 1) % size);
 							selection[0] = row;
 							selection[1] = (col + size - 1) % size;
@@ -289,29 +327,29 @@ public class SuperTicTacToeGame {
 			for (int row = 0; row < size; row++) {
 				for (int col = 0; col < size; col++) {
 
-
+					//Checks if current cell is O, if the end of the 
+					//connections link is O, if there is an empty
+					//spot in the middle, and if the cell to the
+					//right is not O
 					if (board[row][col] == CellStatus.O && 
 							board[row][(col + connections - 1) % size] 
-									== CellStatus.O &&
-									board[row][(col + connections - 2)
-									           % size] == 
-									           CellStatus.EMPTY &&
-									           board[row][(col + size + 1) % size] 
-									        		   != CellStatus.O) {
+									== CellStatus.O && isEmpty(row, 
+											(col + connections - 2)
+											% size) && board[row]
+													[(col + size + 1)
+													 % size] != 
+													 CellStatus.O){
 						int attemptToWin = 0;
-						System.out.println("Horizontal middle - row: " + row
-								+ " \n col: " + col);
 
-						//Checks middle going left horizontally
-						for (int con = 1; con < connections - 1; con++) {
-							if (getCell(row, (col + size - con) % size)
-									== CellStatus.EMPTY) 
+						//Checks middle going left horizontally to win
+						for (int con = 1; 
+								con < connections - 1; con++) {
+							if (isEmpty(row,
+									(col + size - con) % size))
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 2 &&
-								getCell(row, (col + size - 1) % size) 
-								== CellStatus.EMPTY) {
-							System.out.println("going left");
+								isEmpty(row, (col + size - 1) % size)){
 							select(row, (col + size - 1) % size);
 							attemptToWin = 0;
 							selection[0] = row;
@@ -321,16 +359,15 @@ public class SuperTicTacToeGame {
 						else
 							attemptToWin = 0;
 
-						//Checks middle going right horizontally
-						for (int con = 1; con < connections - 1; con++) {
-							if (getCell(row, (col + size + con) % size)
-									== CellStatus.EMPTY) 
+						//Checks middle going right horizontally to win
+						for (int con = 1; 
+								con < connections - 1; con++) {
+							if (isEmpty(row, 
+									(col + size + con) % size)) 
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 2 &&
-								getCell(row, (col + size + 1) % size) 
-								== CellStatus.EMPTY) {
-							System.out.println("going right");
+								isEmpty(row, (col + size + 1) % size)){
 							select(row, (col + size + 1) % size);
 							attemptToWin = 0;
 							selection[0] = row;
@@ -359,20 +396,21 @@ public class SuperTicTacToeGame {
 					if ((connectToWin == connections - 1) &&
 							status == GameStatus.IN_PROGRESS) {
 
-						//Looks at the space above
-						if (board [(row + size % size)][col] 
-								== CellStatus.EMPTY ) {
+						//Looks at the space above to win
+						if (isEmpty((row + size % size), col)){
 							select((row + size % size), col);
 							selection[0] = (row + size % size);
 							selection[1] = col;
 							return selection;
 						}
-						//Looks at the space below
-						else if (board[(row + connections - 1) % size]
-								[col] == CellStatus.EMPTY)  {
+
+						//Looks at the space below to win
+						else if (isEmpty((row + connections - 1)
+								% size, col))  {
 							select((row + connections - 1) % size,
 									col);
-							selection[0] = (row + connections - 1) % size;
+							selection[0] = (row + connections - 1)
+									% size;
 							selection[1] = col;
 							return selection;
 						}
@@ -380,33 +418,32 @@ public class SuperTicTacToeGame {
 				}
 			}
 
-			//Looks if going in the middle Vertically will win
+			//Looks if going in the middle vertically will win
 			for (int col = 0; col < size; col++) {
 				for (int row = 0; row < size; row++) {
 
-
+					//Checks if current cell is O, if the end of the 
+					//connections link is O, if there is an empty
+					//spot in the middle, and if the cell above
+					//is not O
 					if (board[row][col] == CellStatus.O && 
-							board[(row + connections - 1) % size][col] 
+							board[(row + connections - 1) % size][col]
 									== CellStatus.O &&
-									board[(row + connections - 2)
-									      % size][col] == CellStatus.
-									      EMPTY && board[(row + size +
-									    		  1) % size][col] 
-									    				  != CellStatus.O) {
+									isEmpty((row + connections - 2) 
+											% size, col) &&	
+									board[(row + size + 1) % size][col]
+											!= CellStatus.O) {
 						int attemptToWin = 0;
-						System.out.println("Horizontal middle - row: " + row
-								+ " \n col: " + col);
 
-						//Checks middle going up vertically
-						for (int con = 1; con < connections - 1; con++) {
-							if (getCell((row + size - con) % size, col)
-									== CellStatus.EMPTY) 
+						//Checks middle going up vertically to win
+						for (int con = 1;
+								con < connections - 1; con++){
+							if (isEmpty(
+									(row + size - con) % size, col)) 
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 2 &&
-								getCell((row + size - 1) % size, col) 
-								== CellStatus.EMPTY) {
-							System.out.println("going up");
+								isEmpty((row + size - 1) % size, col)){
 							select((row + size - 1) % size, col);
 							attemptToWin = 0;
 							selection[0] = (row + size - 1) % size;
@@ -416,16 +453,15 @@ public class SuperTicTacToeGame {
 						else
 							attemptToWin = 0;
 
-						//Checks middle going down vertically
-						for (int con = 1; con < connections - 1; con++) {
-							if (getCell((row + size + con) % size, col)
-									== CellStatus.EMPTY) 
+						//Checks middle going down vertically to win
+						for (int con = 1;
+								con < connections - 1; con++){
+							if (isEmpty(
+									(row + size + con) % size, col))
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 2 &&
-								getCell((row + size + 1) % size, col) 
-								== CellStatus.EMPTY) {
-							System.out.println("going down");
+								isEmpty((row + size + 1) % size, col)){
 							select((row + size + 1) % size, col);
 							attemptToWin = 0;
 							selection[0] = (row + size + 1) % size;
@@ -439,10 +475,10 @@ public class SuperTicTacToeGame {
 			}
 		}
 
-		//blockUserAI
+		//Logic for AI to block the User from winning
 		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
 
-			//Checks if X about to win horizontally
+			//Checks if user is about to win horizontally
 			for (int row = 0; row < size; row++) {
 				for (int col = 0; col < size; col++) {
 
@@ -457,18 +493,19 @@ public class SuperTicTacToeGame {
 					if ((numToWin == connections - 1) && 
 							status == GameStatus.IN_PROGRESS) {
 
-						//Looks at the space to the right
-						if (board[row][(col + connections - 1) % size] 
-								== CellStatus.EMPTY) {
+						// Looks at the space to the right to block
+						if (isEmpty(row, 
+								(col + connections - 1) % size)) {
 							select(row, 
 									(col + connections - 1) % size);
 							selection[0] = row;
-							selection[1] = (col + connections - 1) % size;
+							selection[1] = (col + connections - 1)
+									% size;
 						}
 
-						//Looks at the space to the left
-						else if (board[row][(col + size - 1) % size] 
-								== CellStatus.EMPTY) {
+						// Looks at the space to the left to block
+						else if (isEmpty(row, 
+								(col + size - 1) % size)) {
 							select(row, (col + size - 1) % size);
 							selection[0] = row;
 							selection[1] = (col + size - 1) % size;
@@ -476,32 +513,30 @@ public class SuperTicTacToeGame {
 					}
 				}
 			}
-			//Looks if going in the middle horizontally will win
+			// Looks if going in the middle horizontally will block
 			for (int row = 0; row < size; row++) {
 				for (int col = 0; col < size; col++) {
 
 					if (board[row][col] == CellStatus.X && 
-							board[row][(col + connections - 1) % size] 
-									== CellStatus.X &&
-									board[row][(col + connections - 2)
-									           % size] == 
-									           CellStatus.EMPTY &&
-									           board[row][(col + size + 1) % size] 
-									        		   != CellStatus.X) {
+							board[row][(col + connections - 1) % size]
+									== CellStatus.X && isEmpty
+									(row, (col + connections - 2) 
+											% size) && 
+									board[row][(col	+ size + 1) % size]
+											!= CellStatus.X) {
 						int attemptToWin = 0;
-						System.out.println("Horizontal middle - row: " + row
-								+ " \n col: " + col);
 
-						//Checks middle going left horizontally
-						for (int con = 1; con < connections - 1; con++) {
-							if (getCell(row, (col + size - con) % size)
-									== CellStatus.EMPTY) 
+						// Checks middle going left 
+						// horizontally to block
+						for (int con = 1; 
+								con < connections - 1; con++) {
+							if (isEmpty(row, 
+									(col + size - con) % size)) 
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 2 &&
-								getCell(row, (col + size - 1) % size) 
-								== CellStatus.EMPTY) {
-							System.out.println("going left");
+								isEmpty(row, 
+										(col + size - 1) % size)) {
 							select(row, (col + size - 1) % size);
 							attemptToWin = 0;
 							selection[0] = row;
@@ -511,16 +546,17 @@ public class SuperTicTacToeGame {
 						else
 							attemptToWin = 0;
 
-						//Checks middle going right horizontally
-						for (int con = 1; con < connections - 1; con++) {
-							if (getCell(row, (col + size + con) % size)
-									== CellStatus.EMPTY) 
+						// Checks middle going right 
+						// horizontally to block
+						for (int con = 1; 
+								con < connections - 1; con++) {
+							if (isEmpty(row, 
+									(col + size + con) % size)) 
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 2 &&
-								getCell(row, (col + size + 1) % size) 
-								== CellStatus.EMPTY) {
-							System.out.println("going right");
+								isEmpty(row, 
+										(col + size + 1) % size)) {
 							select(row, (col + size + 1) % size);
 							attemptToWin = 0;
 							selection[0] = row;
@@ -534,7 +570,7 @@ public class SuperTicTacToeGame {
 			}
 
 
-			//Checks if X is about to win vertically
+			//Checks if the user is about to win vertically
 			for (int col = 0; col < size; col++) {
 				for (int row = 0; row < size; row++) {
 
@@ -549,20 +585,20 @@ public class SuperTicTacToeGame {
 					if ((connectToWin == connections - 1) &&
 							status == GameStatus.IN_PROGRESS) {
 
-						//Looks at the space above
-						if (board [(row + size % size)][col] 
-								== CellStatus.EMPTY ) {
+						//Looks at the space above to block
+						if (isEmpty((row + size % size), col)) {
 							select((row + size % size), col);
 							selection[0] = (row + size % size);
 							selection[1] = col;
 							return selection;
 						}
-						//Looks at the space below
-						else if (board[(row + connections - 1) % size]
-								[col] == CellStatus.EMPTY)  {
+						//Looks at the space below to block
+						else if (isEmpty((row + connections - 1)
+								% size, col)) {
 							select((row + connections - 1) % size, 
 									col);
-							selection[0] = (row + connections - 1) % size;
+							selection[0] = (row + connections - 1)
+									% size;
 							selection[1] = col;
 							return selection;
 						}
@@ -570,33 +606,30 @@ public class SuperTicTacToeGame {
 					}
 				}
 			}
-			
-			//Looks if going in the middle Vertically will win
+
+			//Looks if going in the middle vertically will block
 			for (int col = 0; col < size; col++) {
 				for (int row = 0; row < size; row++) {
 
 					if (board[row][col] == CellStatus.X && 
 							board[(row + connections - 1) % size][col] 
 									== CellStatus.X &&
-									board[(row + connections - 2)
-									      % size][col] == CellStatus.
-									      EMPTY && board[(row + size +
-									    		  1) % size][col] 
-									    				  != CellStatus.X) {
+									isEmpty((row + connections - 2)
+											% size, col) && 
+									board[(row + size + 1) % size][col]
+											!= CellStatus.X) {
 						int attemptToWin = 0;
-						System.out.println("Horizontal middle - row: " + row
-								+ " \n col: " + col);
 
-						//Checks middle going up vertically
-						for (int con = 1; con < connections - 1; con++) {
-							if (getCell((row + size - con) % size, col)
-									== CellStatus.EMPTY) 
+						//Checks middle going up vertically to block
+						for (int con = 1; 
+								con < connections - 1; con++) {
+							if (isEmpty((row + size - con) % size,
+									col)) 
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 2 &&
-								getCell((row + size - 1) % size, col) 
-								== CellStatus.EMPTY) {
-							System.out.println("going up");
+								isEmpty((row + size - 1) % size,
+										col)) {
 							select((row + size - 1) % size, col);
 							attemptToWin = 0;
 							selection[0] = (row + size - 1) % size;
@@ -606,16 +639,15 @@ public class SuperTicTacToeGame {
 						else
 							attemptToWin = 0;
 
-						//Checks middle going down vertically
-						for (int con = 1; con < connections - 1; con++) {
-							if (getCell((row + size + con) % size, col)
-									== CellStatus.EMPTY) 
+						//Checks middle going down vertically to block
+						for (int con = 1; 
+								con < connections - 1; con++) {
+							if (isEmpty((row + size + con) % size,
+									col)) 
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 2 &&
-								getCell((row + size + 1) % size, col) 
-								== CellStatus.EMPTY) {
-							System.out.println("going down");
+								isEmpty((row + size + 1) % size, col)){
 							select((row + size + 1) % size, col);
 							attemptToWin = 0;
 							selection[0] = (row + size + 1) % size;
@@ -627,11 +659,10 @@ public class SuperTicTacToeGame {
 					}
 				}
 			}
-			
+
 		}
 
-		//tacticsAI
-
+		//Logic for the AI if it can't win or block the user
 		if (turn == CellStatus.O && status == GameStatus.IN_PROGRESS) {
 
 			//Tactically moves up or down
@@ -640,8 +671,6 @@ public class SuperTicTacToeGame {
 
 					if (board[row][col] == CellStatus.O) {
 						int attemptToWin = 0;
-						System.out.println("Vertical - row: " + row +
-								" \n col: " + col);
 
 						//Attempts to move down
 						for (int con = 1; con < connections; con++) {
@@ -650,9 +679,7 @@ public class SuperTicTacToeGame {
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 1 &&
-								getCell((row + 1) % size, col)
-								== CellStatus.EMPTY ) {
-							System.out.println("going down");
+								isEmpty((row + 1) % size, col)) {
 							select((row + 1) % size, col);
 							attemptToWin = 0;
 							selection[0] = (row + 1) % size;
@@ -669,9 +696,8 @@ public class SuperTicTacToeGame {
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 1 &&
-								getCell((row + size - 1) % size, col)
-								== CellStatus.EMPTY) {
-							System.out.println("going up");
+								isEmpty((row + size - 1) % size, 
+										col)) {
 							select((row + size - 1) % size, col);
 							attemptToWin = 0;
 							selection[0] = (row + size - 1) % size;
@@ -690,8 +716,6 @@ public class SuperTicTacToeGame {
 
 					if (board[row][col] == CellStatus.O) {
 						int attemptToWin = 0;
-						System.out.println("Horizontal - row: " + row
-								+ " \n col: " + col);
 
 						//Attempts to move left
 						for (int con = 1; con < connections; con++) {
@@ -700,9 +724,8 @@ public class SuperTicTacToeGame {
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 1 &&
-								getCell(row, (col + size - 1) % size) 
-								== CellStatus.EMPTY) {
-							System.out.println("going left");
+								isEmpty(row, 
+										(col + size - 1) % size)) {
 							select(row, (col + size - 1) % size);
 							attemptToWin = 0;
 							selection[0] = row;
@@ -719,9 +742,8 @@ public class SuperTicTacToeGame {
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 1 &&
-								getCell(row, (col + size + 1) % size) 
-								== CellStatus.EMPTY) {
-							System.out.println("going right");
+								isEmpty(row, 
+										(col + size + 1) % size)) {
 							select(row, (col + size + 1) % size);
 							attemptToWin = 0;
 							selection[0] = row;
@@ -734,32 +756,43 @@ public class SuperTicTacToeGame {
 				}
 			}
 
-			//If no tactical move exits, randomly move
+			//If no tactical move exists, randomly move
 			Random rand = new Random();
 
 			int randR = (rand.nextInt(size));
 			int randC = (rand.nextInt(size));
 
-			while( getCell(randR, randC) != CellStatus.EMPTY) {
+			//Makes sure the random cell will be empty
+			while( !isEmpty(randR, randC)) {
 				randR = (rand.nextInt(size));
 				randC = (rand.nextInt(size));
 			}
-			System.out.println("Randomly moving");
 			select(randR,randC);
 			selection[0] = randR;
 			selection[1] = randC;
 			return selection;
 		}
 
-
+		//Returns the coordinates of the selection the AI made
 		return selection;
 	}
 
-
+	/******************************************************************
+	 * Sets the turn for the game to X (the user)
+	 * @param none
+	 * @return none
+	 * @throws none
+	 *****************************************************************/
 	public void setTurnX () {
 		turn = CellStatus.X;
 	}
 
+	/******************************************************************
+	 * Sets the turn for the game to O (the AI)
+	 * @param none
+	 * @return none
+	 * @throws none
+	 *****************************************************************/
 	public void setTurnO () {
 		turn = CellStatus.O;
 	}
