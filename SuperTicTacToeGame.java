@@ -58,7 +58,7 @@ public class SuperTicTacToeGame {
 				board[row][col] = CellStatus.EMPTY;
 		}
 
-		turn = CellStatus.X;
+//		turn = CellStatus.X;
 	}
 
 	/******************************************************************
@@ -491,6 +491,14 @@ public class SuperTicTacToeGame {
 			return;
 			
 		}
+	}
+	
+	public void setTurnX () {
+		turn = CellStatus.X;
+	}
+	
+	public void setTurnO () {
+		turn = CellStatus.O;
 	}
 
 }

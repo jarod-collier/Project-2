@@ -179,6 +179,30 @@ public class SuperTicTacToePanel extends JPanel {
 						" valid parameters.");
 			}
 	
+			try {
+				String turn = JOptionPane.showInputDialog(null,
+						"Enter '1' to go first or '2' to got second:");
+				if (turn.equals("1")) {
+					game.setTurnX();
+				} 
+				else if (turn.equals("2")) {
+					game.setTurnO();
+				}
+				else {
+					throw new IllegalArgumentException();
+				}
+			}
+			catch (IllegalArgumentException e) {
+				if (gameStart)
+					JOptionPane.showMessageDialog(null, "Enter valid number");
+			}
+			catch (Exception e) {
+				if (gameStart)
+					 System.exit(0);
+				 else 
+					 cancel = true;
+			}
+			
 			
 			center = new JPanel();
 			center.setLayout(new GridLayout(size,size,3,2));
