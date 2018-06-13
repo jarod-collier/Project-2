@@ -257,11 +257,11 @@ public class SuperTicTacToePanel extends JPanel {
 						int selection [];
 						selection = game.startMoveAI();
 						
-//						game.tryToWinAI();
+						game.tryToWinAI();
 						
 //						game.blockUserAI();
 //						
-//						game.tacticsAI();
+						game.tacticsAI();
 						turnSelection [turn][0] = selection[0];
 						turnSelection [turn][1] = selection[1];
 						turn++;
