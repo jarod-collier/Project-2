@@ -269,6 +269,7 @@ public class SuperTicTacToeGame {
 									(col + connections - 1) % size);
 							selection[0] = row;
 							selection[1] = (col + connections - 1) % size;
+							return selection;
 
 						}
 
@@ -278,6 +279,7 @@ public class SuperTicTacToeGame {
 							select(row, (col + size - 1) % size);
 							selection[0] = row;
 							selection[1] = (col + size - 1) % size;
+							return selection;
 
 						}
 					}
@@ -365,6 +367,7 @@ public class SuperTicTacToeGame {
 							select((row + size % size), col);
 							selection[0] = (row + size % size);
 							selection[1] = col;
+							return selection;
 						}
 						//Looks at the space below
 						else if (board[(row + connections - 1) % size]
@@ -373,6 +376,7 @@ public class SuperTicTacToeGame {
 									col);
 							selection[0] = (row + connections - 1) % size;
 							selection[1] = col;
+							return selection;
 						}
 					}
 				}
