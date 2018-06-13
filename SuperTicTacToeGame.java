@@ -2,7 +2,6 @@ package package1;
 
 import java.util.Random;
 
-import javafx.scene.control.Cell;
 
 /**********************************************************************
  * This class handles all of the game logic for Tic Tac Toe
