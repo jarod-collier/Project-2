@@ -54,7 +54,7 @@ public class SuperTicTacToePanel extends JPanel {
 	private int turn;
 	private int [][] turnSelection;
 	
-	private String moveFirst;
+	private int moveFirst;
 	
 	// variable used to keep track of first turn 
 	// (1 = user, 2 = AI)
@@ -214,8 +214,10 @@ public class SuperTicTacToePanel extends JPanel {
 
 			// prompt user if they want to go first or second
 			try {
-				moveFirst = JOptionPane.showInputDialog(null,
+				String firstMove = JOptionPane.showInputDialog(null,
 						"Enter '1' to go first or '2' to got second:");
+				
+				moveFirst = Integer.parseInt(firstMove);
 			}
 			catch (Exception e) {
 				// if the game just started
@@ -225,14 +227,10 @@ public class SuperTicTacToePanel extends JPanel {
 					cancel = true;  	// set cancel to true
 				}
 			}
-			if (moveFirst.equals("1")) {
-				firstTurn = 1;
-				game.setTurnX();
+			if (moveFirst == 1) {
 				goodFirstTurn = true;
 			} 
-			else if (moveFirst.equals("2")) {
-				firstTurn = 2;
-				game.setTurnO();
+			else if (moveFirst == 2) {
 				goodFirstTurn = true;
 			}
 			else {
@@ -254,7 +252,14 @@ public class SuperTicTacToePanel extends JPanel {
 						" valid parameters.");
 			}
 	
-			
+			if (moveFirst == 1) {
+				firstTurn = 1;
+				game.setTurnX();
+			} 
+			else if (moveFirst == 2) {
+				firstTurn = 2;
+				game.setTurnO();
+			}
 			
 			// create new panel for the board, set layout
 			center = new JPanel();
