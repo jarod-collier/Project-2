@@ -587,7 +587,7 @@ public class SuperTicTacToeGame {
 						}
 						if (attemptToWin == connections - 1 &&
 								getCell(row, (col + size - 1) % size) 
-								!= CellStatus.X) {
+								== CellStatus.EMPTY) {
 							System.out.println("going left");
 							select(row, (col + size - 1) % size);
 							attemptToWin = 0;
@@ -601,7 +601,7 @@ public class SuperTicTacToeGame {
 						//Attempts to move right
 						for (int con = 1; con < connections; con++) {
 							if (getCell(row, (col + size + con) % size)
-									== CellStatus.EMPTY) 
+									!= CellStatus.X) 
 								attemptToWin++;							
 						}
 						if (attemptToWin == connections - 1 &&
