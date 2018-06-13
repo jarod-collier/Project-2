@@ -12,54 +12,69 @@ import java.awt.event.ActionListener;
  * Creates the Panel for the TicTacToe GUI
  * 
  * @author Jarod Collier and Ben Burger
- * @version 5/31/18
+ * @version 6/12/2018
  *********************************************************************/
 public class SuperTicTacToePanel extends JPanel {
 
+	// declaring buttons
 	private JButton[][] board;
-	private CellStatus iCell;
+	private JButton quitButton;
+	private JButton undoButton;
+	private JButton resetButton;
+	
+	// declaring labels
 	private JLabel xWon;
 	private JLabel oWon;
 	private JLabel labxWins;
 	private JLabel laboWins;
-	private JButton quitButton;
-	private JButton undoButton;
-	private JButton resetButton;
-
-	private SuperTicTacToeGame game;
-
+	
+	// declaring sub-panels
+	private JPanel bottom;
+	private JPanel center;
+	
+	// declaring image icons to be used for the board
 	private ImageIcon emptyIcon;
 	private ImageIcon xIcon;
 	private ImageIcon oIcon;
+	
+	// declaring a button listener
+	private ButtonListener listener;
+	
+	// declaring a variable used to check the 
+	// status of each cell of the board
+	private CellStatus iCell;
+	
+	// declaring a new tic tac toe game
+	private SuperTicTacToeGame game;
 
+	// instance variables used to set up board and 
+	// keep track of each turn
 	private int size;
 	private int connectionsToWin;
 	private int turn;
 	private int [][] turnSelection;
 	
-	JPanel bottom;
-	JPanel center;
-	ButtonListener listener;
-	
+	// booleans used when user tries to caneal
 	private boolean gameStart = true; 
 	private boolean cancel = false;
 	
 	
 	public SuperTicTacToePanel() {
 
-		
+		// create bottom panel 
+		// (contains undo, quit, reset buttons and win totals)
 		bottom = new JPanel();
 
 
-		//Sets images for the icons
+		// set images for the icons
 		emptyIcon = new ImageIcon("blank.png");
 		xIcon = new ImageIcon("x.png");
 		oIcon = new ImageIcon("o.png");
 
-		// create game, listeners
+		// create action listener
 		listener = new ButtonListener();
 
-		// create Undo, quit, and reset buttons.
+		// create and add undo, quit, reset buttons
 		quitButton = new JButton("Quit");
 		quitButton.addActionListener(listener);
 		undoButton = new JButton("Undo");
@@ -67,17 +82,22 @@ public class SuperTicTacToePanel extends JPanel {
 		resetButton = new JButton("Reset");
 		resetButton.addActionListener(listener);
 
+		// method call to create board
 		createBoard();
 
+		// method call to display board
 		displayBoard();
 
+		// set layout for bottom panel 
 		bottom.setLayout (new GridLayout(4,2,0,0));
 		
+		// setting text for labels
 		labxWins = new JLabel ("X Wins: ");
 		laboWins = new JLabel ("O Wins: ");
 		xWon = new JLabel ("0");
 		oWon = new JLabel ("0");
 
+		// adding labels and buttons to bottom panel
 		bottom.add(labxWins);
 		bottom.add(xWon);
 		bottom.add(laboWins);
@@ -86,17 +106,21 @@ public class SuperTicTacToePanel extends JPanel {
 		bottom.add(undoButton);
 		bottom.add(resetButton);
 
+		// adding bottom and center panels
 		add (bottom);
 		add (center);
-		
-		
-
 	}
+	
+	
 	/******************************************************************
 	 * Displays the TicTacToe board by setting the image in each cell.
+	 * @param none
+	 * @return none
+	 * @throws none
 	 *****************************************************************/
 	private void displayBoard() {
 
+		// nested for loop, sets image in each cell of the board
 		for (int row = 0; row < game.getBoard().length; row++)
 			for (int col = 0; col < game.getBoard().length; col++) {
 
@@ -112,29 +136,34 @@ public class SuperTicTacToePanel extends JPanel {
 				else if (iCell == CellStatus.EMPTY)
 					board[row][col].setIcon(emptyIcon);
 			}		
-
 	}
 
-
+	/******************************************************************
+	 * Creates a TicTacToe board.
+	 * @param none
+	 * @return none
+	 * @throws none
+	 *****************************************************************/
 	public void createBoard () {
 		
-	
-		
-		// Asks user for the desired board size
+		// asks user for the desired board size
 		boolean goodNum = false;
 
+		// stays in loop until valid size is entered or
+		// user hits cancel
 		while (!goodNum && !cancel) {
 			try {
 				String boardSize = JOptionPane.showInputDialog(null, "Enter" +
 						" in the size of the board: \n (Must be 2 < n < 10)");
-	
+
 				size = Integer.parseInt(boardSize);
 			}
 			catch(Exception e) {
-				 if (gameStart)
-					 System.exit(0);
-				 else 
-					 cancel = true;
+				// if the game just started
+				if (gameStart)
+					System.exit(0);   // exit the program
+				else 
+					cancel = true;    // set cancel to true
 			}
 			if (size > 2 && size < 10)
 				goodNum = true;
@@ -143,10 +172,11 @@ public class SuperTicTacToePanel extends JPanel {
 						" valid board size.");
 		}
 
-
-		// Asks user for the desired number of connections
+		// asks user for the desired number of connections
 		boolean goodConnection = false;
 
+		// stays in loop until valid number of connections
+		// is entered or user hits cancel
 		while (!goodConnection && !cancel) {
 			try {
 				String connections = JOptionPane.showInputDialog(null,
@@ -156,10 +186,11 @@ public class SuperTicTacToePanel extends JPanel {
 				connectionsToWin = Integer.parseInt(connections);
 			}
 			catch (Exception e) {
+				// if the game just started
 				if (gameStart)
-					 System.exit(0);
+					 System.exit(0);  	// exit the program
 				 else 
-					 cancel = true;
+					 cancel = true;     // set cancel to true
 			}
 			if (connectionsToWin > 2 && connectionsToWin <= size)
 				goodConnection = true;
@@ -167,7 +198,10 @@ public class SuperTicTacToePanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "Enter" +
 						" valid amount of connections.");
 		}
+		
+		// if the user didn't cancel
 		if (!cancel) {
+			// try to create a new game
 			try {
 				game = new SuperTicTacToeGame(size, connectionsToWin);
 				turn = 0;
@@ -179,6 +213,7 @@ public class SuperTicTacToePanel extends JPanel {
 						" valid parameters.");
 			}
 	
+			// prompt user if they want to go first or second
 			try {
 				String turn = JOptionPane.showInputDialog(null,
 						"Enter '1' to go first or '2' to got second:");
@@ -197,17 +232,22 @@ public class SuperTicTacToePanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Enter valid number");
 			}
 			catch (Exception e) {
+				// if the game just started
 				if (gameStart)
-					 System.exit(0);
+					 System.exit(0); 	// exit the program
 				 else 
-					 cancel = true;
+					 cancel = true;  	// set cancel to true
 			}
 			
-			
+			// create new panel for the board, set layout
 			center = new JPanel();
 			center.setLayout(new GridLayout(size,size,3,2));
+			
+			// create new button board
 			board = new JButton[size][size];
 	
+			// nested for loops: adds buttons, sets board to blank,
+			// adds listeners
 			for (int row = 0; row < game.getBoard().length; row++)
 				for (int col = 0; col < game.getBoard().length; col++) {
 	
@@ -220,6 +260,8 @@ public class SuperTicTacToePanel extends JPanel {
 					center.add(board[row][col]);
 				}
 		}
+		
+		// set cancel to false
 		cancel = false;
 	}
 
@@ -227,31 +269,43 @@ public class SuperTicTacToePanel extends JPanel {
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
+			
+			// if quit button is clicked, exit program 
 			if (quitButton == e.getSource())
-				System.exit(0);
+				System.exit(0); 
 
+			// if reset button is clicked
 			if (resetButton == e.getSource()) {
 				JOptionPane.showMessageDialog(null, "The game will reset");
+				
+				// reset game, create new board, add new center panel
 				game.reset();
 				remove(center);
 				createBoard();
 				add (center);
 				
-				game.startMoveAI();
+//				game.startMoveAI();    is this suppose to be here?
 				
+				// display new board
 				displayBoard();
 				revalidate();
 				repaint();		
 			}
 
 
-			//Presses a button on the board
+			// nested for loops, determines which cell was selected
 			for (int row = 0; row < game.getBoard().length; row++) {
 				for (int col = 0; col < game.getBoard().length; col++) {
 					if (board[row][col] == e.getSource() && game.isEmpty(row,col)) {
+						
+						// select method
 						game.select (row,col);
+						
+						// storing coordinates of the selected cell
 						turnSelection [turn][0] = row;
 						turnSelection [turn][1] = col;
+						
+						// increment turn
 						turn++;
 						
 						int selection [];
@@ -262,8 +316,12 @@ public class SuperTicTacToePanel extends JPanel {
 //						game.blockUserAI();
 //						
 //						game.tacticsAI();
+						
+						// store coordinates of AI selected cell
 						turnSelection [turn][0] = selection[0];
 						turnSelection [turn][1] = selection[1];
+						
+						// increment turn
 						turn++;
 					}
 				}
@@ -271,6 +329,7 @@ public class SuperTicTacToePanel extends JPanel {
 
 			displayBoard();
 
+			// checking if O (AI) won
 			if (game.getGameStatus() == GameStatus.O_WON) {
 				JOptionPane.showMessageDialog(null, "O won and "
 						+ "X lost!\n The game will reset");
@@ -283,31 +342,34 @@ public class SuperTicTacToePanel extends JPanel {
 						(Integer.parseInt(oWon.getText()) + 1));
 			}
 
+			// checking if X (user) won
 			if (game.getGameStatus() == GameStatus.X_WON) {
 				JOptionPane.showMessageDialog(null, "X won and "
 						+ "O lost!\n The game will reset");
 				game.reset();
 			
-				game.startMoveAI();
+//				game.startMoveAI();     ?????????????????????
 				
 				displayBoard();	
 				xWon.setText("" + 
 						(Integer.parseInt(xWon.getText()) + 1));
 			}
 
+			// checking if game is a tie
 			if (game.getGameStatus() == GameStatus.CATS) {
 				JOptionPane.showMessageDialog(null, "Tie game!" + 
 						"\n The game will reset");
 				game.reset();
 				
-				game.startMoveAI();
+//				game.startMoveAI();         ?????????????????
 				
 				displayBoard();
 			}
 
-
+			// undo button is clicked 
 			if (undoButton == e.getSource()) {
 				if (turn >= 2) {
+					// undo the last user move and AI move
 					game.undo(turnSelection[turn-1][0],turnSelection[turn-1][1]);
 					game.undo(turnSelection[turn-2][0],turnSelection[turn-2][1]);
 					turn = turn - 2;

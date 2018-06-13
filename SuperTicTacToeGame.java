@@ -267,6 +267,7 @@ public class SuperTicTacToeGame {
 								== CellStatus.EMPTY) {
 							select(row, 
 									(col + connections - 1) % size);
+							
 						}
 
 						//Looks at the space to the left
