@@ -179,91 +179,11 @@ public class SuperTicTacToePanel extends JPanel {
 		// asks user for the desired board size
 		boolean goodNum = false;
 
-		// stays in loop until valid size is entered or
-		// user hits cancel
-		while (!goodNum && !cancel) {
-			try {
-				String boardSize = JOptionPane.showInputDialog(null, 
-						"Enter in the size of the board: \n "
-								+ "(Must be 2 < n < 10)");
+		goodNum = getValidBoardSize(goodNum);
 
-				size = Integer.parseInt(boardSize);
-			}
-			catch(Exception e) {
-				// if the game just started
-				if (gameStart)
-					System.exit(0);   // exit the program
-				else 
-					cancel = true;    // set cancel to true
-			}
-			if (size > 2 && size < 10)
-				goodNum = true;
-			else
-				JOptionPane.showMessageDialog(null, "Enter" +
-						" valid board size.");
-		}
+		getValidConnections();
 
-		// asks user for the desired number of connections
-		boolean goodConnection = false;
-
-		// stays in loop until valid number of connections
-		// is entered or user hits cancel
-		while (!goodConnection && !cancel) {
-			try {
-				String connections = JOptionPane.showInputDialog(null,
-						"Enter number of connections needed to win: "
-								+ "\n (Must be >2 and less than the "
-								+ "size of the board)");
-
-				connectionsToWin = Integer.parseInt(connections);
-			}
-			catch (Exception e) {
-				// if the game just started
-				if (gameStart)
-					System.exit(0);  	// exit the program
-				else 
-					cancel = true;     // set cancel to true
-			}
-			if (connectionsToWin > 2 && connectionsToWin <= size)
-				goodConnection = true;
-			else
-				JOptionPane.showMessageDialog(null, "Enter" +
-						" valid amount of connections.");
-		}
-
-		// asks user who should start
-		boolean goodFirstTurn = false;
-
-		// stays in loop until valid first turn
-		// is entered or user hits cancel
-		while (!goodFirstTurn && !cancel) {
-
-			// prompt user if they want to go first or second
-			try {
-				String firstMove = JOptionPane.showInputDialog(null,
-						"Enter '1' to go first or '2' to got second:");
-
-				moveFirst = Integer.parseInt(firstMove);
-			}
-			catch (Exception e) {
-				// if the game just started
-				if (gameStart)
-					System.exit(0); 	// exit the program
-				else {
-					cancel = true;  	// set cancel to true
-				}
-			}
-			if (moveFirst == 1) {
-				goodFirstTurn = true;
-			} 
-			else if (moveFirst == 2) {
-				goodFirstTurn = true;
-			}
-			else {
-				JOptionPane.showMessageDialog(null, 
-						"Enter valid number");
-			}
-		}	
+		getValidTurn();	
 
 		// if the user didn't cancel
 		if (!cancel) {
@@ -314,6 +234,102 @@ public class SuperTicTacToePanel extends JPanel {
 		cancel = false;
 
 		game.commandAI();
+	}
+
+
+	private void getValidTurn() {
+		// asks user who should start
+		boolean goodFirstTurn = false;
+
+		// stays in loop until valid first turn
+		// is entered or user hits cancel
+		while (!goodFirstTurn && !cancel) {
+
+			// prompt user if they want to go first or second
+			try {
+				String firstMove = JOptionPane.showInputDialog(null,
+						"Enter '1' to go first or '2' to got second:");
+
+				moveFirst = Integer.parseInt(firstMove);
+			}
+			catch (Exception e) {
+				// if the game just started
+				if (gameStart)
+					System.exit(0); 	// exit the program
+				else {
+					cancel = true;  	// set cancel to true
+				}
+			}
+			if (moveFirst == 1) {
+				goodFirstTurn = true;
+			} 
+			else if (moveFirst == 2) {
+				goodFirstTurn = true;
+			}
+			else {
+				JOptionPane.showMessageDialog(null, 
+						"Enter valid number");
+			}
+		}
+	}
+
+
+	private void getValidConnections() {
+		// asks user for the desired number of connections
+		boolean goodConnection = false;
+
+		// stays in loop until valid number of connections
+		// is entered or user hits cancel
+		while (!goodConnection && !cancel) {
+			try {
+				String connections = JOptionPane.showInputDialog(null,
+						"Enter number of connections needed to win: "
+								+ "\n (Must be >2 and less than the "
+								+ "size of the board)");
+
+				connectionsToWin = Integer.parseInt(connections);
+			}
+			catch (Exception e) {
+				// if the game just started
+				if (gameStart)
+					System.exit(0);  	// exit the program
+				else 
+					cancel = true;     // set cancel to true
+			}
+			if (connectionsToWin > 2 && connectionsToWin <= size)
+				goodConnection = true;
+			else
+				JOptionPane.showMessageDialog(null, "Enter" +
+						" valid amount of connections.");
+		}
+	}
+
+
+	private boolean getValidBoardSize(boolean goodNum) {
+		// stays in loop until valid size is entered or
+		// user hits cancel
+		while (!goodNum && !cancel) {
+			try {
+				String boardSize = JOptionPane.showInputDialog(null, 
+						"Enter in the size of the board: \n "
+								+ "(Must be 2 < n < 10)");
+
+				size = Integer.parseInt(boardSize);
+			}
+			catch(Exception e) {
+				// if the game just started
+				if (gameStart)
+					System.exit(0);   // exit the program
+				else 
+					cancel = true;    // set cancel to true
+			}
+			if (size > 2 && size < 10)
+				goodNum = true;
+			else
+				JOptionPane.showMessageDialog(null, "Enter" +
+						" valid board size.");
+		}
+		return goodNum;
 	}
 
 

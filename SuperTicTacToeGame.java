@@ -249,7 +249,7 @@ public class SuperTicTacToeGame {
 	 * @return Integer Array of the the coordinates that the AI selects
 	 * @throws none
 	 *****************************************************************/
-	public int [] commandAI() {
+	public int [] commandAI() { //Hi, just committing this for a project
 
 		//Creates the array that holds coordinates of AI's move
 		int selection [] = {0,0};
